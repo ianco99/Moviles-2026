@@ -8,6 +8,7 @@ public class TruckController : MonoBehaviour
     [SerializeField] private bool player1;
     [SerializeField] private PlayerInput input;
     [SerializeField] private SteeringWheel steeringWheel;
+    [SerializeField] private UIPedals uiPedals;
     
     [Header("Car Properties")]
     public float motorTorque = 2000f;
@@ -43,8 +44,8 @@ public class TruckController : MonoBehaviour
         {
             //hInput = steeringAction.ReadValue<float>();
             hInput = steeringWheel.TurnDir;
-            vInput = gasAction.IsPressed() ? vInput = 1.0f : 0f;
-            vInput = brakeAction.IsPressed() ? vInput = -1.0f : vInput;
+            vInput = uiPedals.pedalGas.IsPressed ? vInput = 1.0f : 0f;
+            vInput = uiPedals.pedalBrake.IsPressed ? vInput = -1.0f : vInput;
         }
         else
         {
