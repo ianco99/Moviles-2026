@@ -1,61 +1,48 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class MoneyBag : MonoBehaviour
+namespace MoneyBags
 {
-	public const string DEFAULTVARIANT = "default";
-	
-	[SerializeField] MeshRenderer _meshRenderer;
-	public float MoneyValue;
-	
-	public void SetMaterial(Material mat)
+	public class MoneyBagFactory : MonoBehaviour
 	{
-		_meshRenderer.material = mat;
-	}
+		[SerializeField] private MoneyBag moneyBagPrefab;
+		[SerializeField] private MoneyBagSO[] _moneyBagVariants;
+		[SerializeField] private Transform[] spawnLocations;
+		
+		private Dictionary<string, MoneyBagSO> _moneyBags = new Dictionary<string, MoneyBagSO>();
 
-	public void SetValue(float value)
-	{
-		MoneyValue = value;
-	}
-}
-
-[CreateAssetMenu(menuName = "Scriptable Objects/Money Bag", fileName = "MoneyBagVariant")]
-public sealed class MoneyBagSO : ScriptableObject
-{
-	public string VariantName = MoneyBag.DEFAULTVARIANT;
-	public float MoneyValue;
-	public Material BagMaterial;
-}
-
-public class MoneyBagFactory : MonoBehaviour
-{
-	[SerializeField] private MoneyBag moneyBagPrefab;
-	[SerializeField] private List<MoneyBagSO> _moneyBagVariants;
-	
-	private Dictionary<string, MoneyBagSO> _moneyBags;
-
-	private void Awake()
-	{
-		//cache for future use
-		foreach (MoneyBagSO moneyBag in _moneyBagVariants)
+		private void Awake()
 		{
-			_moneyBags.Add(moneyBag.VariantName, moneyBag);
-		}
-	}
-
-	public void SpawnMoneyBag(Vector3 position, Quaternion rotation, string variantName = MoneyBag.DEFAULTVARIANT)
-	{
-		if (_moneyBags.TryGetValue(variantName, out MoneyBagSO variant))
-		{
-			MoneyBag moneyBag = Instantiate(moneyBagPrefab, position, rotation);
+			//cache for future use
+			foreach (MoneyBagSO moneyBag in _moneyBagVariants)
+			{
+				_moneyBags.Add(moneyBag.VariantName, moneyBag);
+			}
 			
-			moneyBag.SetMaterial(variant.BagMaterial);
-			moneyBag.SetValue(variant.MoneyValue);
+			SpawnAtLocations();
 		}
-		else
+
+		private void SpawnAtLocations()
 		{
-			Debug.LogError("Money bag variant not found.");
+			for (int i = 0; i < spawnLocations.Length; i++)
+			{
+				SpawnMoneyBag(spawnLocations[i].position, spawnLocations[i].rotation);
+			}
+		}
+
+		public void SpawnMoneyBag(Vector3 position, Quaternion rotation, string variantName = MoneyBag.DEFAULTVARIANT)
+		{
+			if (_moneyBags.TryGetValue(variantName, out MoneyBagSO variant))
+			{
+				MoneyBag moneyBag = Instantiate(moneyBagPrefab, position, rotation);
+
+				//moneyBag.SetMaterial(variant.BagMaterial);
+				moneyBag.SetValue(variant.MoneyValue);
+			}
+			else
+			{
+				Debug.LogError("Money bag variant not found.");
+			}
 		}
 	}
 }

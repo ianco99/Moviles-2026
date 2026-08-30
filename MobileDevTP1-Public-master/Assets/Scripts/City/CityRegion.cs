@@ -4,20 +4,26 @@ using UnityEngine;
 
 namespace Scene
 {
+	[RequireComponent(typeof(BoxCollider))]
 	public class CityRegion : MonoBehaviour
 	{
-		[SerializeField] private BoxCollider boxCollider;
+		private BoxCollider boxCollider;
 
-		private Dictionary<Transform, bool> _playerTransform;
+		private Dictionary<Transform, bool> playerTransform;
 
 		public int RegionId;
 
 		public Action<int> playerLeftArea;
 		public Action<int> playerEnteredArea;
 
+		private void Awake()
+		{
+			boxCollider = GetComponent<BoxCollider>();
+		}
+
 		private void Update()
 		{
-			foreach (KeyValuePair<Transform, bool> playerTransform in _playerTransform)
+			foreach (KeyValuePair<Transform, bool> playerTransform in playerTransform)
 			{
 				bool inside = CheckInside(playerTransform.Key);
 
@@ -28,18 +34,26 @@ namespace Scene
 					else
 						playerLeftArea?.Invoke(RegionId);
 					
-					_playerTransform[playerTransform.Key] = inside;
+					this.playerTransform[playerTransform.Key] = inside;
 				}
 			}
 		}
 
 		public void SetUp(Transform[] playerTransform)
 		{
+			this.playerTransform = new Dictionary<Transform, bool>();
+			
+			return;
+			
 			foreach (Transform player in playerTransform)
 			{
-				bool sas = CheckInside(player);
-				
-				
+				bool isPlayerInside = CheckInside(player);
+				if (isPlayerInside)
+				{
+					
+					return;
+				}
+
 			}
 		}
 
