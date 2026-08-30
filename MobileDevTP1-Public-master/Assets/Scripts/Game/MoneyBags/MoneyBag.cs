@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using ianco99.ToolBox.Events;
+using ianco99.ToolBox.Services;
+using UnityEngine;
 
 namespace MoneyBags
 {
@@ -7,6 +9,9 @@ namespace MoneyBags
 		public const string DEFAULTVARIANT = "default";
 
 		[SerializeField] MeshRenderer _meshRenderer;
+
+		EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
+
 		public float MoneyValue;
 
 		public void SetMaterial(Material mat)
@@ -20,6 +25,14 @@ namespace MoneyBags
 		public void SetValue(float value)
 		{
 			MoneyValue = value;
+		}
+
+		private void OnTriggerEnter(Collider other)
+		{
+			if (other.tag == "Player1")
+				EventBus.Raise<PickUpMoneyEvent>(0, MoneyValue);
+			else if (other.tag == "Player2")
+				EventBus.Raise<PickUpMoneyEvent>(1, MoneyValue);
 		}
 	}
 }
