@@ -5,11 +5,11 @@ namespace MoneyBags
 	public struct PickUpMoneyEvent : IEvent
 	{
 		public int PlayerId;
-		public int MoneyAmount;
+		public float MoneyAmount;
 		public void Assign(params object[] parameters)
 		{
 			PlayerId = (int)parameters[0];
-			MoneyAmount = (int)parameters[1];
+			MoneyAmount = (float)parameters[1];
 		}
 
 		public void Reset()

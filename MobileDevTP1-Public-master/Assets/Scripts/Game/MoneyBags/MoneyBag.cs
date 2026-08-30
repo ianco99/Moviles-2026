@@ -30,9 +30,15 @@ namespace MoneyBags
 		private void OnTriggerEnter(Collider other)
 		{
 			if (other.tag == "Player1")
+			{
 				EventBus.Raise<PickUpMoneyEvent>(0, MoneyValue);
+				Destroy(gameObject);
+			}
 			else if (other.tag == "Player2")
+			{
 				EventBus.Raise<PickUpMoneyEvent>(1, MoneyValue);
+				Destroy(gameObject);
+			}
 		}
 	}
 }

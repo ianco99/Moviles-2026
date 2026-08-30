@@ -9,19 +9,20 @@ namespace Game
 {
 	public class PlayerWalletManager : MonoBehaviour
 	{
-		private int playerId;
+		private int playerId = 0;
 
-		private int playerMoney;
+		public float playerMoney;
 		EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
 		
-		private void Awake()
+		private void Start()
 		{
 			EventBus.Subscribe<PickUpMoneyEvent>(OnPickUpMoney);
 		}
 
 		private void OnPickUpMoney(in PickUpMoneyEvent pickUpMoneyEvent)
 		{
-			
+			if (pickUpMoneyEvent.PlayerId == playerId)
+				playerMoney += pickUpMoneyEvent.MoneyAmount;
 		}
 
 		public void SetUp(int playerId)
