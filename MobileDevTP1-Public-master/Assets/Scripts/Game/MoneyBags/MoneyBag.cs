@@ -1,4 +1,5 @@
-﻿using ianco99.ToolBox.Events;
+﻿using System;
+using ianco99.ToolBox.Events;
 using ianco99.ToolBox.Services;
 using UnityEngine;
 
@@ -7,18 +8,22 @@ namespace MoneyBags
 	public sealed class MoneyBag : MonoBehaviour
 	{
 		public const string DEFAULTVARIANT = "default";
-
-		[SerializeField] MeshRenderer _meshRenderer;
-
 		EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
+
+		[SerializeField] private ParticleSystem pickUpParticles;
+
+		[SerializeField] private MeshRenderer meshRenderer;
+		[SerializeField] private SphereCollider sphereCollider;
+		[SerializeField] private Light light;
+		
 
 		public float MoneyValue;
 
 		public void SetMaterial(Material mat)
 		{
-			for (int i = 0; i < _meshRenderer.materials.Length; i++)
+			for (int i = 0; i < meshRenderer.materials.Length; i++)
 			{
-				_meshRenderer.materials[i] = mat;
+				meshRenderer.materials[i] = mat;
 			}
 		}
 
@@ -32,13 +37,28 @@ namespace MoneyBags
 			if (other.tag == "Player1")
 			{
 				EventBus.Raise<PickUpMoneyEvent>(0, MoneyValue);
-				Destroy(gameObject);
+				
+				OnPickUp();
+				
 			}
 			else if (other.tag == "Player2")
 			{
 				EventBus.Raise<PickUpMoneyEvent>(1, MoneyValue);
-				Destroy(gameObject);
+				
+				OnPickUp();
+				
 			}
 		}
+
+		private void OnPickUp()
+		{
+			pickUpParticles.Play();
+			sphereCollider.enabled = false;
+			meshRenderer.enabled = false;
+			light.enabled = false;
+			
+			Destroy(gameObject, 4.0f);
+		}
+		
 	}
 }

@@ -117032,6 +117032,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.7071055
       objectReference: {fileID: 0}
+    - target: {fileID: 4621129692945358953, guid: 514ac53862939534083df9fb1d9b6d0d,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -129283,10 +129288,79 @@ MonoBehaviour:
   miInput: 1
   Desde: {fileID: 13017}
   Hasta: {fileID: 13016}
+--- !u!1001 &5352146021475251219
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1528056761285004721, guid: bcb2050c62373104e8bf771cdd8030dc,
+        type: 3}
+      propertyPath: m_Name
+      value: Soap Bubbles
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223422481551510258, guid: bcb2050c62373104e8bf771cdd8030dc,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223422481551510258, guid: bcb2050c62373104e8bf771cdd8030dc,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223422481551510258, guid: bcb2050c62373104e8bf771cdd8030dc,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223422481551510258, guid: bcb2050c62373104e8bf771cdd8030dc,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223422481551510258, guid: bcb2050c62373104e8bf771cdd8030dc,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223422481551510258, guid: bcb2050c62373104e8bf771cdd8030dc,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223422481551510258, guid: bcb2050c62373104e8bf771cdd8030dc,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223422481551510258, guid: bcb2050c62373104e8bf771cdd8030dc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223422481551510258, guid: bcb2050c62373104e8bf771cdd8030dc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4223422481551510258, guid: bcb2050c62373104e8bf771cdd8030dc,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bcb2050c62373104e8bf771cdd8030dc, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 5352146021475251219}
   - {fileID: 6249}
   - {fileID: 6244}
   - {fileID: 6250}

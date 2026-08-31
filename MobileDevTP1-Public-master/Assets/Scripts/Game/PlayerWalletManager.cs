@@ -1,8 +1,6 @@
-﻿using System;
-using ianco99.ToolBox.Events;
+﻿using ianco99.ToolBox.Events;
 using ianco99.ToolBox.Services;
 using MoneyBags;
-using Unity.Android.Gradle.Manifest;
 using UnityEngine;
 
 namespace Game
