@@ -1,4 +1,5 @@
-﻿using UnityEngine.InputSystem;
+﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Game.States
 {
@@ -6,29 +7,186 @@ namespace Game.States
 	{
 		public override BehaviourActions GetOnEnterBehaviours(params object[] parameters)
 		{
-			throw new System.NotImplementedException();
+			return new BehaviourActions();
 		}
 
 		public override BehaviourActions GetTickBehaviours(params object[] parameters)
 		{
 			BehaviourActions actions = new BehaviourActions();
-			
+
 			PlayerInput input = parameters[0] as PlayerInput;
-			
-			actions.AddMainThreadableBehaviour(0,() => 
+
+			actions.AddMainThreadableBehaviour(0, () =>
 			{
-				if (input.actions["Up"].IsPressed())
+				Debug.Log("Im start");
+				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
+				Debug.Log(readValue);
+				if(readValue.y > 0.1f)
 				{
 					OnTrigger?.Invoke(TutorialController.Triggers.PressedUp.ToString());
 				}
 			});
-			
+
 			return actions;
 		}
 
 		public override BehaviourActions GetOnExitBehaviours(params object[] parameters)
 		{
-			throw new System.NotImplementedException();
+			return new BehaviourActions();
+		}
+	}
+
+	public class TutorialLeft : State
+	{
+		private Sprite tutorialPrompt;
+		
+		public override BehaviourActions GetOnEnterBehaviours(params object[] parameters)
+		{
+			BehaviourActions actions = new BehaviourActions();
+			
+			Animator animator = parameters[0] as Animator;
+			
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				Debug.Log("anim up");
+				animator.SetTrigger("Up");
+			});
+			
+			return actions;
+		}
+
+		public override BehaviourActions GetTickBehaviours(params object[] parameters)
+		{
+			BehaviourActions actions = new BehaviourActions();
+
+			PlayerInput input = parameters[0] as PlayerInput;
+
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				Debug.Log("Im left");
+				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
+				if(readValue.x < -0.1f)
+				{
+					OnTrigger?.Invoke(TutorialController.Triggers.PressedLeft.ToString());
+				}
+			});
+
+			return actions;
+		}
+
+		public override BehaviourActions GetOnExitBehaviours(params object[] parameters)
+		{
+			return new BehaviourActions();
+		}
+	}
+
+	public class TutorialRight : State
+	{
+	
+		public override BehaviourActions GetOnEnterBehaviours(params object[] parameters)
+		{
+			BehaviourActions actions = new BehaviourActions();
+			
+			Animator animator = parameters[0] as Animator;
+			
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				animator.SetTrigger("Down");
+			});
+
+			return actions;
+		}
+
+		public override BehaviourActions GetTickBehaviours(params object[] parameters)
+		{
+			BehaviourActions actions = new BehaviourActions();
+
+			PlayerInput input = parameters[0] as PlayerInput;
+
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				Debug.Log("Im right");
+				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
+				if(readValue.x > 0.1f)
+				{
+					OnTrigger?.Invoke(TutorialController.Triggers.PressedRight.ToString());
+				}
+			});
+
+			return actions;
+		}
+
+		public override BehaviourActions GetOnExitBehaviours(params object[] parameters)
+		{
+			return new BehaviourActions();
+		}
+	}
+
+	public class TutorialDown : State
+	{
+		public override BehaviourActions GetOnEnterBehaviours(params object[] parameters)
+		{
+			BehaviourActions actions = new BehaviourActions();
+			
+			Animator animator = parameters[0] as Animator;
+			
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				animator.SetTrigger("Left");
+			});
+
+			return actions;
+		}
+
+		public override BehaviourActions GetTickBehaviours(params object[] parameters)
+		{
+			BehaviourActions actions = new BehaviourActions();
+
+			PlayerInput input = parameters[0] as PlayerInput;
+
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				Debug.Log("im down");
+				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
+				if(readValue.y < -0.1f)
+				{
+					OnTrigger?.Invoke(TutorialController.Triggers.PressedDown.ToString());
+				}
+			});
+
+			return actions;
+		}
+
+		public override BehaviourActions GetOnExitBehaviours(params object[] parameters)
+		{
+			return new BehaviourActions();
+		}
+	}
+	
+	public class TutorialWin : State
+	{
+		public override BehaviourActions GetOnEnterBehaviours(params object[] parameters)
+		{
+			BehaviourActions actions = new BehaviourActions();
+			
+			Animator animator = parameters[0] as Animator;
+			
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				animator.SetTrigger("Right");
+			});
+
+			return actions;
+		}
+
+		public override BehaviourActions GetTickBehaviours(params object[] parameters)
+		{
+			return new BehaviourActions();
+		}
+
+		public override BehaviourActions GetOnExitBehaviours(params object[] parameters)
+		{
+			return new BehaviourActions();
 		}
 	}
 }

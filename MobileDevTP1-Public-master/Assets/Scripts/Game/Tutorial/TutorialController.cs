@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO.Enumeration;
 using Game.States;
 using ianco99.ToolBox.Events;
 using ianco99.ToolBox.Services;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Networking;
 
 public class TutorialController : MonoBehaviour
 {
@@ -45,20 +47,24 @@ public class TutorialController : MonoBehaviour
 			{Triggers.PressedRight.ToString(), (int)Triggers.PressedRight}
 		};
 		
-		triggers.Add("Left", (int)Triggers.PressedLeft);
-
 		fsm = new FSM(Enum.GetValues(typeof(States)).Length, triggers);
 		
-		fsm.AddState<TutorialStart>((int)States.Start, updateParametersPointer: () => new object[] { playerInput });
+		fsm.AddState<TutorialStart>((int)States.Start, enterParametersPointer: () => new object[] {animator}, updateParametersPointer: () => new object[] { playerInput });
+		fsm.AddState<TutorialLeft>((int)States.Left, enterParametersPointer: () => new object[] {animator}, updateParametersPointer: () => new object[] { playerInput });
+		fsm.AddState<TutorialDown>((int)States.Down, enterParametersPointer: () => new object[] {animator}, updateParametersPointer: () => new object[] { playerInput });
+		fsm.AddState<TutorialRight>((int)States.Right, enterParametersPointer: () => new object[] {animator}, updateParametersPointer: () => new object[] { playerInput });
+		fsm.AddState<TutorialWin>((int)States.Right+1, enterParametersPointer: () => new object[] {animator});
 		
+		fsm.RegisterTransition((int)States.Start, Triggers.PressedUp.ToString(),(int)States.Left);
+		fsm.RegisterTransition((int)States.Left, Triggers.PressedLeft.ToString(),(int)States.Down);
+		fsm.RegisterTransition((int)States.Down, Triggers.PressedDown.ToString(),(int)States.Right);
+		fsm.RegisterTransition((int)States.Right, Triggers.PressedRight.ToString(),(int)States.Right+1);
 		
-		SetUpTutorial();
+		fsm.ForceState(0);
 	}
 
-	
-	
-	private void SetUpTutorial()
+	private void Update()
 	{
-		animator.SetTrigger("Start");
+		fsm.Update();
 	}
 }

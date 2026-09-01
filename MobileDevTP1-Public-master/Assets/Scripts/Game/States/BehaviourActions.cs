@@ -22,7 +22,7 @@ public struct BehaviourActions
 		mainThreadBehaviours[excecutionOrder].Add(behaviour);
 	}
 
-	public void AddMultiTrheadableBehaviour(int excecutionOrder, Action behaviour) 
+	public void AddMultiThreadableBehaviour(int excecutionOrder, Action behaviour) 
 	{
 		if (multiThreadableBehaviours == null)
 			multiThreadableBehaviours = new ConcurrentDictionary<int, List<Action>>();
