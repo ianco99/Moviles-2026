@@ -21,7 +21,7 @@ namespace Game.States
 				Debug.Log("Im start");
 				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
 				Debug.Log(readValue);
-				if(readValue.y > 0.1f)
+				if(readValue.y > 0.5f)
 				{
 					OnTrigger?.Invoke(TutorialController.Triggers.PressedUp.ToString());
 				}
@@ -65,7 +65,7 @@ namespace Game.States
 			{
 				Debug.Log("Im left");
 				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
-				if(readValue.x < -0.1f)
+				if(readValue.x < -0.5f)
 				{
 					OnTrigger?.Invoke(TutorialController.Triggers.PressedLeft.ToString());
 				}
@@ -107,7 +107,7 @@ namespace Game.States
 			{
 				Debug.Log("Im right");
 				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
-				if(readValue.x > 0.1f)
+				if(readValue.x > 0.5f)
 				{
 					OnTrigger?.Invoke(TutorialController.Triggers.PressedRight.ToString());
 				}
@@ -148,7 +148,7 @@ namespace Game.States
 			{
 				Debug.Log("im down");
 				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
-				if(readValue.y < -0.1f)
+				if(readValue.y < -0.5f)
 				{
 					OnTrigger?.Invoke(TutorialController.Triggers.PressedDown.ToString());
 				}
