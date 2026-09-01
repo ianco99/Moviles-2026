@@ -1,5 +1,4 @@
-﻿using System;
-using ianco99.ToolBox.Events;
+﻿using ianco99.ToolBox.Events;
 using ianco99.ToolBox.Services;
 using UnityEngine;
 
