@@ -12,8 +12,6 @@ public class Deposito2 : MonoBehaviour
 	
 	Collider[] PjColl;
 	
-	//----------------------------------------------//
-
 	void Start () 
 	{
 		Contr1 = GameObject.Find("ContrDesc1").GetComponent<ControladorDeDescarga>();
@@ -31,8 +29,6 @@ public class Deposito2 : MonoBehaviour
 			PjActual.transform.forward = transform.forward;
 		}
 	}
-	
-	//----------------------------------------------//
 	
 	public void Soltar()
 	{
