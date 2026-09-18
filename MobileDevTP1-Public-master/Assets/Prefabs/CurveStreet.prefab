@@ -568,7 +568,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400054}
   m_Layer: 0
-  m_Name: "Curva 45\xBA"
+  m_Name: CurveStreet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

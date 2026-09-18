@@ -26,7 +26,7 @@ namespace Game
 
 		public void LoadSingleplayerScene()
 		{
-			Load("Test");
+			Load("Gameplay");
 		}
 		
 		private void Load(string sceneName)
@@ -40,7 +40,7 @@ namespace Game
 			yield return loadingScreen.FadeIn();
 
 			AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
-			operation.allowSceneActivation = false;
+ 			operation.allowSceneActivation = false;
 
 			float startTime = Time.unscaledTime;
 			float displayed = 0f;

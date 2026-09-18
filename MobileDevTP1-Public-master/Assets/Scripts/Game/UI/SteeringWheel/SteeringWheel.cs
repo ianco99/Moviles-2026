@@ -49,13 +49,13 @@ public class SteeringWheel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 				return;
 			}
 
-			float angle = Mathf.Atan2(fromCenter.x, fromCenter.y) * Mathf.Rad2Deg;
-			visualWheel.localRotation = Quaternion.Euler(0f, 0f, -angle);
+			float angle = -Mathf.Atan2(fromCenter.x, fromCenter.y) * Mathf.Rad2Deg;
+			visualWheel.localRotation = Quaternion.Euler(0f, 0f, angle);
 		}
 
 		Vector3 sas = new Vector3(1f, 0, 0);
 
-		TurnDir = Vector3.Project(visualWheel.up, sas).x;
+		TurnDir = -Vector3.Project(visualWheel.up, sas).x;
 	}
 
 	private Vector2 GetNormalizedPoint(Vector2 screenPos, Camera cam)
