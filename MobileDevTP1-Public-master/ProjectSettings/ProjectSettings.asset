@@ -890,7 +890,9 @@ PlayerSettings:
   webGLCloseOnQuit: 0
   webWasm2023: 0
   webEnableSubmoduleStrippingCompatibility: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Android: ANDROID_BUILD
+    Standalone: PC_BUILD
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

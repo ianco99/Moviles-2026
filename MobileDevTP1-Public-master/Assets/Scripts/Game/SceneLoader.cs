@@ -1,4 +1,7 @@
 using System.Collections;
+using Game.Events;
+using ianco99.ToolBox.Events;
+using ianco99.ToolBox.Services;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +10,8 @@ namespace Game
 	public class SceneLoader : MonoBehaviour
 	{
 		public static SceneLoader Instance { get; private set; }
+
+		private EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
 
 		[SerializeField] private LoadingScreen loadingScreen;
 		[SerializeField] private float minimumDisplayTime = 1.5f;
@@ -26,7 +31,14 @@ namespace Game
 
 		public void LoadSingleplayerScene()
 		{
-			Load("Gameplay");
+			EventBus.Raise<StartSinglePlayerEvent>();
+			Load("Gameplay1P");
+		}
+
+		public void LoadMultiplayerScene()
+		{
+			EventBus.Raise<StartMultiPlayerEvent>();
+			Load("Gameplay2P");
 		}
 		
 		private void Load(string sceneName)

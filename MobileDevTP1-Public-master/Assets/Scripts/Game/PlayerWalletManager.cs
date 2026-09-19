@@ -7,7 +7,7 @@ namespace Game
 {
 	public class PlayerWalletManager : MonoBehaviour
 	{
-		private int playerId = 0;
+		[SerializeField] private int playerId = 0;
 
 		public float playerMoney;
 		EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();

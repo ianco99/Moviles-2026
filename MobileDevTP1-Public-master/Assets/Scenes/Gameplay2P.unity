@@ -1503,6 +1503,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3972258607016293532, guid: 6146fe1e3c7e97e44b72d93cf80add85,
+        type: 3}
+      propertyPath: m_NormalizedViewPortRect.width
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4177,11 +4182,21 @@ PrefabInstance:
     - target: {fileID: 3972258607016293532, guid: 6146fe1e3c7e97e44b72d93cf80add85,
         type: 3}
       propertyPath: m_NormalizedViewPortRect.x
-      value: 0
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6005291430272760147, guid: 6146fe1e3c7e97e44b72d93cf80add85,
+        type: 3}
+      propertyPath: m_DefaultActionMap
+      value: eff4320b-fed8-48b4-a852-bd663f6c8281
       objectReference: {fileID: 0}
     - target: {fileID: 6233258424432719042, guid: 6146fe1e3c7e97e44b72d93cf80add85,
         type: 3}
       propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6313095881561100050, guid: 6146fe1e3c7e97e44b72d93cf80add85,
+        type: 3}
+      propertyPath: playerId
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -8321,6 +8336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f73037208f64b8e9fc6af32e819422b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.PlayerWalletManager
+  playerId: 0
   playerMoney: 0
 --- !u!4 &1894273271
 Transform:
