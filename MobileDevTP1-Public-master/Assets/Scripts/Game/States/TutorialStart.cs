@@ -18,7 +18,6 @@ namespace Game.States
 
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
-				Debug.Log("Im start");
 				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
 				Debug.Log(readValue);
 				if(readValue.y > 0.5f)
@@ -48,7 +47,6 @@ namespace Game.States
 			
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
-				Debug.Log("anim up");
 				animator.SetTrigger("Up");
 			});
 			
@@ -63,7 +61,6 @@ namespace Game.States
 
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
-				Debug.Log("Im left");
 				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
 				if(readValue.x < -0.5f)
 				{
@@ -105,7 +102,6 @@ namespace Game.States
 
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
-				Debug.Log("Im right");
 				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
 				if(readValue.x > 0.5f)
 				{
@@ -146,7 +142,6 @@ namespace Game.States
 
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
-				Debug.Log("im down");
 				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
 				if(readValue.y < -0.5f)
 				{
