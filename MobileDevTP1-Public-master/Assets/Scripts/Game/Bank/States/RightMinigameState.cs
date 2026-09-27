@@ -44,7 +44,7 @@ namespace Game.Bank.States
             actions.AddMainThreadableBehaviour(0, () =>
             {
                 Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
-                if(readValue.y < -0.5f)
+                if(readValue.x > 0.5f)
                 {
                     OnTrigger?.Invoke(DepositMinigameController.Triggers.PressedRight.ToString());
                 }

@@ -406,8 +406,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49b6b40d893a2f646ba24cb0d4e49bb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TruckController
-  player1: 1
+  playerID: 0
   input: {fileID: 6005291430272760147}
+  camera: {fileID: 3972258607016293532}
   steeringWheel: {fileID: 4689479035945492027}
   uiPedals: {fileID: 4441583115801601535}
   motorTorque: 200

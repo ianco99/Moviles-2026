@@ -26,6 +26,13 @@ namespace Game.Bank
 
         private int GetCurrentBags => currentBagsRemaining;
 
+        private Func<int> dad => Coso;
+
+        private int Coso()
+        {
+            return GetCurrentBags;
+        }
+
         private enum States
         {
             Start,
@@ -57,6 +64,7 @@ namespace Game.Bank
 
             Dictionary<string, int> triggers = new Dictionary<string, int>()
             {
+                { Triggers.ReadyForInput.ToString(), (int)Triggers.ReadyForInput },
                 { Triggers.PressedLeft.ToString(), (int)Triggers.PressedLeft },
                 { Triggers.PressedDown.ToString(), (int)Triggers.PressedDown },
                 { Triggers.PressedRight.ToString(), (int)Triggers.PressedRight }
@@ -65,32 +73,42 @@ namespace Game.Bank
             fsm = new FSM(Enum.GetValues(typeof(States)).Length, triggers);
 
             fsm.AddState<StartMinigameState>((int)States.Start,
-                constructionParameters: new object[] { GetCurrentBags, bagsVisuals, animator });
-            
-            fsm.AddState<LeftMinigameState>((int)States.Left, constructionParameters: new object[] { bagTargetPos[0] },
-                enterParametersPointer: () => new object[] { visualPCPrompts[0], bagsVisuals, GetCurrentBags },
-                updateParametersPointer: () => new object[]
-                    { GetCurrentBags, bagsVisuals, playerInput, Time.deltaTime },
-                exitParametersPointer: () => new object[] { visualPCPrompts[0] });
-            
-            fsm.AddState<DownMinigameState>((int)States.Down, constructionParameters: new object[] { bagTargetPos[1] },
+                constructionParameters: new object[] { dad, bagsVisuals, animator }, updateParametersPointer:
+                () => new object[] { Time.deltaTime });
+
+            fsm.AddState<LeftMinigameState>((int)States.Left,
+                constructionParameters: new object[] { bagTargetPos[0].position },
                 enterParametersPointer: () => new object[] { visualPCPrompts[1], bagsVisuals, GetCurrentBags },
                 updateParametersPointer: () => new object[]
                     { GetCurrentBags, bagsVisuals, playerInput, Time.deltaTime },
                 exitParametersPointer: () => new object[] { visualPCPrompts[1] });
-            
-            fsm.AddState<RightMinigameState>((int)States.Right, constructionParameters: new object[] { bagTargetPos[2] },
+
+            fsm.AddState<DownMinigameState>((int)States.Down,
+                constructionParameters: new object[] { bagTargetPos[1].position },
                 enterParametersPointer: () => new object[] { visualPCPrompts[2], bagsVisuals, GetCurrentBags },
                 updateParametersPointer: () => new object[]
                     { GetCurrentBags, bagsVisuals, playerInput, Time.deltaTime },
                 exitParametersPointer: () => new object[] { visualPCPrompts[2] });
-            
-            fsm.AddState<EndMinigameState>((int)States.End, constructionParameters: new object[] {animator}, updateParametersPointer: () => new object[] {Time.deltaTime});
-            
-            fsm.RegisterTransition((int)States.Start, Triggers.ReadyForInput.ToString(),(int)States.Left);
-            fsm.RegisterTransition((int)States.Left, Triggers.PressedLeft.ToString(),(int)States.Down);
-            fsm.RegisterTransition((int)States.Down, Triggers.PressedDown.ToString(),(int)States.Right);
-            fsm.RegisterTransition((int)States.Right, Triggers.PressedRight.ToString(),(int)States.End);
+
+            fsm.AddState<RightMinigameState>((int)States.Right,
+                constructionParameters: new object[] { bagTargetPos[2].position },
+                enterParametersPointer: () => new object[] { visualPCPrompts[3], bagsVisuals, GetCurrentBags },
+                updateParametersPointer: () => new object[]
+                    { GetCurrentBags, bagsVisuals, playerInput, Time.deltaTime },
+                exitParametersPointer: () => new object[] { visualPCPrompts[3] });
+
+            fsm.AddState<EndMinigameState>((int)States.End, constructionParameters: new object[] { animator },
+                updateParametersPointer: () => new object[] { Time.deltaTime });
+
+            fsm.RegisterTransition((int)States.Start, Triggers.ReadyForInput.ToString(), (int)States.Left);
+            fsm.RegisterTransition((int)States.Left, Triggers.PressedLeft.ToString(), (int)States.Down);
+            fsm.RegisterTransition((int)States.Down, Triggers.PressedDown.ToString(), (int)States.Right);
+            //fsm.RegisterTransition((int)States.Right, Triggers.PressedRight.ToString(), (int)States.End);
+        }
+
+        private void Update()
+        {
+            fsm.Update();
         }
 
         private void OnEndMinigame(in EndMinigameEvent callback)
@@ -98,6 +116,11 @@ namespace Game.Bank
             if (playerID == callback.playerID)
             {
                 minigameParent.SetActive(false);
+
+                if (playerID == 0)
+                    playerInput.SwitchCurrentActionMap("Truck");
+                else
+                    playerInput.SwitchCurrentActionMap("Truck2P");
             }
         }
 
@@ -121,9 +144,14 @@ namespace Game.Bank
 
         private void StartMinigame(int bagsNumber)
         {
+            if (playerID == 0)
+                playerInput.SwitchCurrentActionMap("Download");
+            else
+                playerInput.SwitchCurrentActionMap("Download2P");
+
             minigameParent.SetActive(true);
             currentBagsRemaining = bagsNumber;
-            fsm.ForceState((int)States.Left);
+            fsm.ForceState((int)States.Start);
         }
 
         IEnumerator TrackBag(GameObject bag)

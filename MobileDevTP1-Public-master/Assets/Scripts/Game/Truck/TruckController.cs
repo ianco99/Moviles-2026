@@ -1,13 +1,19 @@
+using Game.Bank;
+using ianco99.ToolBox.Events;
+using ianco99.ToolBox.Services;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 public class TruckController : MonoBehaviour
 {
+	private EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
+	
 	[Header("Player Properties")] [SerializeField]
-	private bool player1;
+	public int playerID;
 
 	[SerializeField] private PlayerInput input;
+	[SerializeField] private Camera camera;
 	[SerializeField] private SteeringWheel steeringWheel;
 	[SerializeField] private UIPedals uiPedals;
 
@@ -31,6 +37,9 @@ public class TruckController : MonoBehaviour
 		rigidBody.centerOfMass += Vector3.up * centreOfGravityOffset;
 		wheels = GetComponentsInChildren<WheelControl>();
 
+		EventBus.Subscribe<StartMinigameEvent>(OnStartMinigame);
+		EventBus.Subscribe<EndMinigameEvent>(OnEndMinigame);
+		
 #if ANDROID_BUILD
 		uiPedals.gameObject.SetActive(true);
 #endif
@@ -42,6 +51,22 @@ public class TruckController : MonoBehaviour
 		gasAction = input.actions["Gas"];
 		brakeAction = input.actions["Brake"];
 #endif
+	}
+
+	private void OnEndMinigame(in EndMinigameEvent callback)
+	{
+		if (callback.playerID == playerID)
+		{
+		camera.gameObject.SetActive(true);
+		}
+	}
+
+	private void OnStartMinigame(in StartMinigameEvent callback)
+	{
+		if (callback.playerID == playerID)
+		{
+			camera.gameObject.SetActive(false);
+		}
 	}
 
 	void FixedUpdate()

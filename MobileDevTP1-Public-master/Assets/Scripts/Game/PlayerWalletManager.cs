@@ -1,4 +1,5 @@
-﻿using ianco99.ToolBox.Events;
+﻿using Game.Bank;
+using ianco99.ToolBox.Events;
 using ianco99.ToolBox.Services;
 using MoneyBags;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Game
 
 		public const int MAX_PLAYER_SLOTS = 3;
 
-		private int currentPlayerSlots = 0;
+		private int currentPlayerSlots = -1;
 		
 		public float playerMoney;
 		EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
@@ -19,6 +20,18 @@ namespace Game
 		private void Start()
 		{
 			EventBus.Subscribe<PickUpMoneyRequestEvent>(OnPickUpMoney);
+			EventBus.Subscribe<EnterMinigameRequestEvent>(OnEnterMinigame);
+		}
+
+		private void OnEnterMinigame(in EnterMinigameRequestEvent callback)
+		{
+			if (callback.playerId == playerId)
+			{
+				if (currentPlayerSlots > 0)
+				{
+					EventBus.Raise<StartMinigameEvent>(playerId, currentPlayerSlots);
+				}
+			}
 		}
 
 		private void OnPickUpMoney(in PickUpMoneyRequestEvent pickUpMoneyRequestEvent)
