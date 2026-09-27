@@ -18,6 +18,20 @@ namespace MoneyBags
 		
 
 		public float MoneyValue;
+		public uint id;
+
+		private void Start()
+		{
+			EventBus.Subscribe<PickUpMoneyAcceptedEvent>(OnPickUpMoney);
+		}
+
+		private void OnPickUpMoney(in PickUpMoneyAcceptedEvent callback)
+		{
+			if (callback.id == id)
+			{
+				OnPickUp();
+			}
+		}
 
 		public void SetMaterial(Material mat)
 		{
@@ -27,26 +41,21 @@ namespace MoneyBags
 			}
 		}
 
-		public void SetValue(float value)
+		public void SetUp(float value, uint id)
 		{
 			MoneyValue = value;
+			this.id = id;
 		}
 
 		private void OnTriggerEnter(Collider other)
 		{
 			if (other.tag == "Player1")
 			{
-				EventBus.Raise<PickUpMoneyEvent>(0, MoneyValue);
-				
-				OnPickUp();
-				
+				EventBus.Raise<PickUpMoneyRequestEvent>(0, MoneyValue, id);
 			}
 			else if (other.tag == "Player2")
 			{
-				EventBus.Raise<PickUpMoneyEvent>(1, MoneyValue);
-				
-				OnPickUp();
-				
+				EventBus.Raise<PickUpMoneyRequestEvent>(1, MoneyValue, id);
 			}
 		}
 

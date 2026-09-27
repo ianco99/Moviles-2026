@@ -8,7 +8,7 @@ namespace Game
 {
 	public class GameManager : MonoBehaviour
 	{
-		EventBus EventBus = ServiceProvider.Instance.GetService<EventBus>();
+		EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
 		
 		private void Awake()
 		{

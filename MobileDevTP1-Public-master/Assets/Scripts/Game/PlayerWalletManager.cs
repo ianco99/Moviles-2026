@@ -9,18 +9,29 @@ namespace Game
 	{
 		[SerializeField] private int playerId = 0;
 
+		public const int MAX_PLAYER_SLOTS = 3;
+
+		private int currentPlayerSlots = 0;
+		
 		public float playerMoney;
 		EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
 		
 		private void Start()
 		{
-			EventBus.Subscribe<PickUpMoneyEvent>(OnPickUpMoney);
+			EventBus.Subscribe<PickUpMoneyRequestEvent>(OnPickUpMoney);
 		}
 
-		private void OnPickUpMoney(in PickUpMoneyEvent pickUpMoneyEvent)
+		private void OnPickUpMoney(in PickUpMoneyRequestEvent pickUpMoneyRequestEvent)
 		{
-			if (pickUpMoneyEvent.PlayerId == playerId)
-				playerMoney += pickUpMoneyEvent.MoneyAmount;
+			if (pickUpMoneyRequestEvent.PlayerId == playerId)
+			{
+				if (currentPlayerSlots < MAX_PLAYER_SLOTS)
+				{
+					currentPlayerSlots++;
+					playerMoney += pickUpMoneyRequestEvent.MoneyAmount;
+					EventBus.Raise<PickUpMoneyAcceptedEvent>(pickUpMoneyRequestEvent.bagId);
+				}
+			}
 		}
 
 		public void SetUp(int playerId)

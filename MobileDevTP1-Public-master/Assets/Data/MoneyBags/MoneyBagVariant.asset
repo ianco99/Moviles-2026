@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: MoneyBagVariant
   m_EditorClassIdentifier: Assembly-CSharp::MoneyBags.MoneyBagSO
   VariantName: default
-  MoneyValue: 1000
+  MoneyValue: 250000
   BagMaterial: {fileID: 0}

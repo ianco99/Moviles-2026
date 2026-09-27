@@ -11,6 +11,8 @@ namespace MoneyBags
 		
 		private Dictionary<string, MoneyBagSO> _moneyBags = new Dictionary<string, MoneyBagSO>();
 
+		private uint moneyBagId = 0;
+
 		private void Awake()
 		{
 			//cache for future use
@@ -37,7 +39,8 @@ namespace MoneyBags
 				MoneyBag moneyBag = Instantiate(moneyBagPrefab, position, rotation);
 
 				//moneyBag.SetMaterial(variant.BagMaterial);
-				moneyBag.SetValue(variant.MoneyValue);
+				moneyBag.SetUp(variant.MoneyValue, moneyBagId);
+				moneyBagId++;
 			}
 			else
 			{
