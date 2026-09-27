@@ -1,3 +1,5 @@
+using ianco99.ToolBox.Events;
+using ianco99.ToolBox.Services;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,6 +7,8 @@ namespace Game.Bank.States
 {
     public class RightMinigameState : State
     {
+        private EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
+
         private Vector3 targetPos;
         private Vector3 startPos;
         private float elapsed;
@@ -46,7 +50,7 @@ namespace Game.Bank.States
                 Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
                 if(readValue.x > 0.5f)
                 {
-                    OnTrigger?.Invoke(DepositMinigameController.Triggers.PressedRight.ToString());
+                    EventBus.Raise<BagReachedEndEvent>();
                 }
             });
             

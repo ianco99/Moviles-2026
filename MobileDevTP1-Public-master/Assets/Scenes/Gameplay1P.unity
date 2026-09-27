@@ -1021,9 +1021,9 @@ MonoBehaviour:
   - {fileID: 990443901}
   - {fileID: 2009264912}
   bagTargetPos:
-  - {fileID: 1358553699}
-  - {fileID: 1097963063}
+  - {fileID: 628283099}
   - {fileID: 22028461}
+  - {fileID: 1097963063}
   playerInput: {fileID: 373065398}
   animator: {fileID: 1222481414}
   bagEndPos: {fileID: 501269701}
@@ -1074,6 +1074,7 @@ Transform:
   - {fileID: 1358553699}
   - {fileID: 1097963063}
   - {fileID: 22028461}
+  - {fileID: 628283099}
   - {fileID: 157565549}
   m_Father: {fileID: 149671508}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4910,6 +4911,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 613794923}
   m_CullTransparentMesh: 1
+--- !u!1 &628283098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 628283099}
+  m_Layer: 0
+  m_Name: BagPosLeft (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &628283099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628283098}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 39.14, y: 0.17, z: -20.35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 150084073}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &643788771
 GameObject:
   m_ObjectHideFlags: 0
