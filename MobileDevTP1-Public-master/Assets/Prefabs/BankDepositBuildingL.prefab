@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 7910966704239918897}
   - component: {fileID: 8342721086036295539}
   - component: {fileID: 8036465845703453165}
+  - component: {fileID: 1714390181564984729}
   - component: {fileID: 5178390631652841592}
-  - component: {fileID: 1020847638354390637}
   m_Layer: 0
   m_Name: Deposito2
   m_TagString: Deposito
@@ -64,6 +64,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 65.78431, z: 1}
   m_Center: {x: 0, y: 28.213203, z: 0}
+--- !u!114 &1714390181564984729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 417514540116525665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4306d0de451446a95aa0eb09bf240c71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DepositTrigge
 --- !u!23 &5178390631652841592
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -113,22 +125,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1020847638354390637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 417514540116525665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 206de8d6996c901409dc8463798b8469, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerTag: Player
-  Vacio: 1
-  Contr1: {fileID: 0}
-  Contr2: {fileID: 0}
 --- !u!1 &601022894600049817
 GameObject:
   m_ObjectHideFlags: 0
