@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.IO.Enumeration;
 using Game.States;
 using ianco99.ToolBox.Events;
 using ianco99.ToolBox.Services;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Networking;
 
 public class TutorialController : MonoBehaviour
 {
-	enum States
+	private enum States
 	{
 		Start,
 		Left,

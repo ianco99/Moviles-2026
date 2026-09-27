@@ -19,7 +19,6 @@ namespace Game.States
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
 				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
-				Debug.Log(readValue);
 				if(readValue.y > 0.5f)
 				{
 					OnTrigger?.Invoke(TutorialController.Triggers.PressedUp.ToString());
