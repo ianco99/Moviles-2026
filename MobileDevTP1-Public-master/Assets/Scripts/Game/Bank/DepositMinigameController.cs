@@ -65,10 +65,21 @@ namespace Game.Bank
         private float bagBonusElapsed;
         private bool isDiminishingBagBonus;
 
+        private Vector3[] bagInitialLocalPositions;
+        private Quaternion[] bagInitialLocalRotations;
+
         private FSM fsm;
 
         private void Start()
         {
+            bagInitialLocalPositions = new Vector3[bagsVisuals.Length];
+            bagInitialLocalRotations = new Quaternion[bagsVisuals.Length];
+            for (int i = 0; i < bagsVisuals.Length; i++)
+            {
+                bagInitialLocalPositions[i] = bagsVisuals[i].transform.localPosition;
+                bagInitialLocalRotations[i] = bagsVisuals[i].transform.localRotation;
+            }
+
             EventBus.Subscribe<StartMinigameEvent>(OnStartMinigame);
             EventBus.Subscribe<BagReachedEndEvent>(OnBagReachedEnd);
             EventBus.Subscribe<EndMinigameEvent>(OnEndMinigame);
@@ -112,7 +123,7 @@ namespace Game.Bank
             fsm.AddState<EndMinigameState>((int)States.End, constructionParameters: new object[] { animator, playerID },
                 updateParametersPointer: () => new object[] { Time.deltaTime });
 
-            fsm.RegisterTransition((int)States.Start, Triggers.ReadyForInput.ToString(), (int)States.Left);
+            fsm.RegisterTransition((int)States.Start, Triggers.ReadyForInput.ToString(), (int)States.Left, UnparentCurrentBag);
             fsm.RegisterTransition((int)States.Left, Triggers.PressedLeft.ToString(), (int)States.Down, StartBagBonusDiminish);
             fsm.RegisterTransition((int)States.Down, Triggers.PressedDown.ToString(), (int)States.Right);
         }
@@ -153,11 +164,28 @@ namespace Game.Bank
             fillParent.SetActive(false);
         }
 
+        private void UnparentCurrentBag()
+        {
+            bagsVisuals[GetCurrentBagIndex].transform.SetParent(null, true);
+        }
+
+        private void ResetAndReparentBags()
+        {
+            for (int i = 0; i < bagsVisuals.Length; i++)
+            {
+                Transform bagTransform = bagsVisuals[i].transform;
+                bagTransform.SetParent(animator.transform, false);
+                bagTransform.localPosition = bagInitialLocalPositions[i];
+                bagTransform.localRotation = bagInitialLocalRotations[i];
+            }
+        }
+
         private void OnEndMinigame(in EndMinigameEvent callback)
         {
             if (playerID == callback.playerID)
             {
                 minigameParent.SetActive(false);
+                ResetAndReparentBags();
 
                 if (playerID == 0)
                     playerInput.SwitchCurrentActionMap("Truck");
@@ -176,6 +204,7 @@ namespace Game.Bank
             else
             {
                 ResetBagBonus();
+                UnparentCurrentBag();
                 fsm.ForceState((int)States.Left);
             }
         }
