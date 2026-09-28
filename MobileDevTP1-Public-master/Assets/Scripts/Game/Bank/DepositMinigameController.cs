@@ -7,6 +7,7 @@ using ianco99.ToolBox.Events;
 using ianco99.ToolBox.Services;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Game.Bank
 {
@@ -22,6 +23,8 @@ namespace Game.Bank
         [SerializeField] private GameObject minigameParent;
         [SerializeField] private GameObject[] visualPCPrompts;
         [SerializeField] private GameObject[] visualPhonePrompts;
+        [SerializeField] private Image fillUI;
+        [SerializeField] private GameObject fillParent;
         EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
 
         private int GetCurrentBags => currentBagsRemaining;
@@ -53,7 +56,14 @@ namespace Game.Bank
         }
 
 
+        private const int BagBonusStart = 100000;
+        private const float BagBonusDiminishDuration = 3.0f;
+
         private int currentBagsRemaining;
+
+        private int currentBagBonus = BagBonusStart;
+        private float bagBonusElapsed;
+        private bool isDiminishingBagBonus;
 
         private FSM fsm;
 
@@ -103,13 +113,44 @@ namespace Game.Bank
                 updateParametersPointer: () => new object[] { Time.deltaTime });
 
             fsm.RegisterTransition((int)States.Start, Triggers.ReadyForInput.ToString(), (int)States.Left);
-            fsm.RegisterTransition((int)States.Left, Triggers.PressedLeft.ToString(), (int)States.Down);
+            fsm.RegisterTransition((int)States.Left, Triggers.PressedLeft.ToString(), (int)States.Down, StartBagBonusDiminish);
             fsm.RegisterTransition((int)States.Down, Triggers.PressedDown.ToString(), (int)States.Right);
         }
 
         private void Update()
         {
             fsm.Update();
+            UpdateBagBonus();
+        }
+
+        private void UpdateBagBonus()
+        {
+            if (!isDiminishingBagBonus)
+                return;
+
+            bagBonusElapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(bagBonusElapsed / BagBonusDiminishDuration);
+            currentBagBonus = (int)Mathf.Lerp(BagBonusStart, 0, t);
+
+            fillUI.fillAmount = 1f - t;
+            
+            if (t >= 1.0f)
+                isDiminishingBagBonus = false;
+        }
+
+        private void StartBagBonusDiminish()
+        {
+            bagBonusElapsed = 0f;
+            isDiminishingBagBonus = true;
+            fillParent.SetActive(true);
+        }
+
+        private void ResetBagBonus()
+        {
+            currentBagBonus = BagBonusStart;
+            bagBonusElapsed = 0f;
+            isDiminishingBagBonus = false;
+            fillParent.SetActive(false);
         }
 
         private void OnEndMinigame(in EndMinigameEvent callback)
@@ -128,11 +169,15 @@ namespace Game.Bank
         private void OnBagReachedEnd(in BagReachedEndEvent callback)
         {
             StartCoroutine(TrackBag(bagsVisuals[GetCurrentBagIndex]));
+            EventBus.Raise<BagBonusCollectedEvent>(playerID, currentBagBonus);
             currentBagsRemaining--;
             if (currentBagsRemaining <= 0)
                 fsm.ForceState((int)States.End);
             else
+            {
+                ResetBagBonus();
                 fsm.ForceState((int)States.Left);
+            }
         }
 
         private void OnStartMinigame(in StartMinigameEvent callback)
@@ -152,6 +197,7 @@ namespace Game.Bank
 
             minigameParent.SetActive(true);
             currentBagsRemaining = bagsNumber;
+            ResetBagBonus();
             fsm.ForceState((int)States.Start);
         }
 

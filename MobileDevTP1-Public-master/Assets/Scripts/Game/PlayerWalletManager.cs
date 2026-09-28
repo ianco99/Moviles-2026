@@ -22,6 +22,15 @@ namespace Game
 			EventBus.Subscribe<PickUpMoneyRequestEvent>(OnPickUpMoney);
 			EventBus.Subscribe<EnterMinigameRequestEvent>(OnEnterMinigame);
 			EventBus.Subscribe<EndMinigameEvent>(OnEndMinigame);
+			EventBus.Subscribe<BagBonusCollectedEvent>(OnBagBonusCollected);
+		}
+
+		private void OnBagBonusCollected(in BagBonusCollectedEvent callback)
+		{
+			if (callback.playerID == playerId)
+			{
+				playerMoney += callback.bonusAmount;
+			}
 		}
 
 		private void OnEndMinigame(in EndMinigameEvent callback)
