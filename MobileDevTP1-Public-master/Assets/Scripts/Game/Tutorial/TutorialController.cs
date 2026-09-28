@@ -34,12 +34,33 @@ public class TutorialController : MonoBehaviour
 	[SerializeField] private PlayerInput playerInput;
 	[SerializeField] private GameObject tutorialRoot;
 
+	[Header("Prompts (Up, Left, Down, Right)")]
+	[SerializeField] private GameObject[] visualWASDPrompts;
+	[SerializeField] private GameObject[] visualArrowPrompts;
+	[SerializeField] private GameObject[] visualSwipePrompts;
+	[SerializeField] private GameObject visualGetReadyPrompt;
+
 	EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
 
 	private FSM fsm;
+	private GameObject[] visualPrompts;
 
 	private void Awake()
 	{
+		HidePrompts(visualWASDPrompts);
+		HidePrompts(visualArrowPrompts);
+		HidePrompts(visualSwipePrompts);
+		visualGetReadyPrompt.SetActive(false);
+
+#if PC_BUILD
+		visualPrompts = playerID == 0 ? visualWASDPrompts : visualArrowPrompts;
+#endif
+
+#if ANDROID_BUILD
+		visualPrompts = visualSwipePrompts;
+#endif
+
+
 		Dictionary<string, int> triggers = new Dictionary<string, int>()
 		{
 			{Triggers.PressedUp.ToString(), (int)Triggers.PressedUp},
@@ -50,11 +71,11 @@ public class TutorialController : MonoBehaviour
 
 		fsm = new FSM(Enum.GetValues(typeof(States)).Length, triggers);
 
-		fsm.AddState<TutorialStart>((int)States.Start, enterParametersPointer: () => new object[] {animator}, updateParametersPointer: () => new object[] { playerInput });
-		fsm.AddState<TutorialLeft>((int)States.Left, enterParametersPointer: () => new object[] {animator}, updateParametersPointer: () => new object[] { playerInput });
-		fsm.AddState<TutorialDown>((int)States.Down, enterParametersPointer: () => new object[] {animator}, updateParametersPointer: () => new object[] { playerInput });
-		fsm.AddState<TutorialRight>((int)States.Right, enterParametersPointer: () => new object[] {animator}, updateParametersPointer: () => new object[] { playerInput });
-		fsm.AddState<TutorialWin>((int)States.Win, enterParametersPointer: () => new object[] {animator});
+		fsm.AddState<TutorialStart>((int)States.Start, enterParametersPointer: () => new object[] {animator, visualPrompts[0]}, updateParametersPointer: () => new object[] { playerInput }, exitParametersPointer: () => new object[] { visualPrompts[0] });
+		fsm.AddState<TutorialLeft>((int)States.Left, enterParametersPointer: () => new object[] {animator, visualPrompts[1]}, updateParametersPointer: () => new object[] { playerInput }, exitParametersPointer: () => new object[] { visualPrompts[1] });
+		fsm.AddState<TutorialDown>((int)States.Down, enterParametersPointer: () => new object[] {animator, visualPrompts[2]}, updateParametersPointer: () => new object[] { playerInput }, exitParametersPointer: () => new object[] { visualPrompts[2] });
+		fsm.AddState<TutorialRight>((int)States.Right, enterParametersPointer: () => new object[] {animator, visualPrompts[3]}, updateParametersPointer: () => new object[] { playerInput }, exitParametersPointer: () => new object[] { visualPrompts[3] });
+		fsm.AddState<TutorialWin>((int)States.Win, enterParametersPointer: () => new object[] {animator, visualGetReadyPrompt});
 
 		fsm.RegisterTransition((int)States.Start, Triggers.PressedUp.ToString(),(int)States.Left);
 		fsm.RegisterTransition((int)States.Left, Triggers.PressedLeft.ToString(),(int)States.Down);
@@ -77,6 +98,12 @@ public class TutorialController : MonoBehaviour
 	private void Update()
 	{
 		fsm.Update();
+	}
+
+	private void HidePrompts(GameObject[] prompts)
+	{
+		foreach (GameObject prompt in prompts)
+			prompt.SetActive(false);
 	}
 
 	private void OnTutorialWon()

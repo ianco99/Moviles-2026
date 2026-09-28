@@ -7,7 +7,16 @@ namespace Game.States
 	{
 		public override BehaviourActions GetOnEnterBehaviours(params object[] parameters)
 		{
-			return new BehaviourActions();
+			BehaviourActions actions = new BehaviourActions();
+			
+			GameObject visualPrompt = parameters[1] as GameObject;
+			
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				visualPrompt.SetActive(true);
+			});
+			
+			return actions;
 		}
 
 		public override BehaviourActions GetTickBehaviours(params object[] parameters)
@@ -30,7 +39,16 @@ namespace Game.States
 
 		public override BehaviourActions GetOnExitBehaviours(params object[] parameters)
 		{
-			return new BehaviourActions();
+			BehaviourActions actions = new BehaviourActions();
+			
+			GameObject visualPrompt = parameters[0] as GameObject;
+			
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				visualPrompt.SetActive(false);
+			});
+			
+			return actions;
 		}
 	}
 
@@ -43,10 +61,12 @@ namespace Game.States
 			BehaviourActions actions = new BehaviourActions();
 			
 			Animator animator = parameters[0] as Animator;
+			GameObject visualPrompt = parameters[1] as GameObject;
 			
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
 				animator.SetTrigger("Up");
+				visualPrompt.SetActive(true);
 			});
 			
 			return actions;
@@ -72,7 +92,16 @@ namespace Game.States
 
 		public override BehaviourActions GetOnExitBehaviours(params object[] parameters)
 		{
-			return new BehaviourActions();
+			BehaviourActions actions = new BehaviourActions();
+			
+			GameObject visualPrompt = parameters[0] as GameObject;
+			
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				visualPrompt.SetActive(false);
+			});
+			
+			return actions;
 		}
 	}
 
@@ -84,10 +113,12 @@ namespace Game.States
 			BehaviourActions actions = new BehaviourActions();
 			
 			Animator animator = parameters[0] as Animator;
+			GameObject visualPrompt = parameters[1] as GameObject;
 			
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
 				animator.SetTrigger("Down");
+				visualPrompt.SetActive(true);
 			});
 
 			return actions;
@@ -113,7 +144,16 @@ namespace Game.States
 
 		public override BehaviourActions GetOnExitBehaviours(params object[] parameters)
 		{
-			return new BehaviourActions();
+			BehaviourActions actions = new BehaviourActions();
+			
+			GameObject visualPrompt = parameters[0] as GameObject;
+			
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				visualPrompt.SetActive(false);
+			});
+			
+			return actions;
 		}
 	}
 
@@ -124,10 +164,12 @@ namespace Game.States
 			BehaviourActions actions = new BehaviourActions();
 			
 			Animator animator = parameters[0] as Animator;
+			GameObject visualPrompt = parameters[1] as GameObject;
 			
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
 				animator.SetTrigger("Left");
+				visualPrompt.SetActive(true);
 			});
 
 			return actions;
@@ -153,7 +195,16 @@ namespace Game.States
 
 		public override BehaviourActions GetOnExitBehaviours(params object[] parameters)
 		{
-			return new BehaviourActions();
+			BehaviourActions actions = new BehaviourActions();
+			
+			GameObject visualPrompt = parameters[0] as GameObject;
+			
+			actions.AddMainThreadableBehaviour(0, () =>
+			{
+				visualPrompt.SetActive(false);
+			});
+			
+			return actions;
 		}
 	}
 	
@@ -164,10 +215,12 @@ namespace Game.States
 			BehaviourActions actions = new BehaviourActions();
 			
 			Animator animator = parameters[0] as Animator;
-			
+			GameObject visualPrompt = parameters[1] as GameObject;
+
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
 				animator.SetTrigger("Right");
+				visualPrompt.SetActive(true);
 			});
 
 			return actions;
