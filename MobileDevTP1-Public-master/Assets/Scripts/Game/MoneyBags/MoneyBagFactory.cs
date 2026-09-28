@@ -5,10 +5,18 @@ namespace MoneyBags
 {
 	public class MoneyBagFactory : MonoBehaviour
 	{
+		private const int MinPlayerCount = 1;
+
+		private const int BagsToRemoveEasy = 0;
+		private const int BagsToRemoveMedium = 6;
+		private const int BagsToRemoveHard = 10;
+
+		private const int BagsRestoredPerExtraPlayer = 2;
+
 		[SerializeField] private MoneyBag moneyBagPrefab;
 		[SerializeField] private MoneyBagSO[] _moneyBagVariants;
 		[SerializeField] private Transform[] spawnLocations;
-		
+
 		private Dictionary<string, MoneyBagSO> _moneyBags = new Dictionary<string, MoneyBagSO>();
 
 		private uint moneyBagId = 0;
@@ -20,16 +28,48 @@ namespace MoneyBags
 			{
 				_moneyBags.Add(moneyBag.VariantName, moneyBag);
 			}
-			
+
 			SpawnAtLocations();
 		}
 
 		private void SpawnAtLocations()
 		{
+			List<int> availableIndices = new List<int>(spawnLocations.Length);
 			for (int i = 0; i < spawnLocations.Length; i++)
 			{
-				SpawnMoneyBag(spawnLocations[i].position, spawnLocations[i].rotation);
+				availableIndices.Add(i);
 			}
+
+			int bagsToRemove = GetBagsToRemoveCount();
+			for (int i = 0; i < bagsToRemove && availableIndices.Count > 0; i++)
+			{
+				int randomIndex = Random.Range(0, availableIndices.Count);
+				availableIndices.RemoveAt(randomIndex);
+			}
+
+			foreach (int index in availableIndices)
+			{
+				SpawnMoneyBag(spawnLocations[index].position, spawnLocations[index].rotation);
+			}
+		}
+
+		private int GetBagsToRemoveCount()
+		{
+			int difficulty = PlayerPrefs.GetInt("Difficulty", 0);
+			int playerCount = PlayerPrefs.GetInt("PlayerCount", MinPlayerCount);
+
+			int bagsToRemove = difficulty switch
+			{
+				0 => BagsToRemoveEasy,
+				1 => BagsToRemoveMedium,
+				2 => BagsToRemoveHard,
+				_ => BagsToRemoveEasy
+			};
+
+			int extraPlayers = Mathf.Max(0, playerCount - MinPlayerCount);
+			bagsToRemove -= extraPlayers * BagsRestoredPerExtraPlayer;
+
+			return Mathf.Clamp(bagsToRemove, 0, spawnLocations.Length);
 		}
 
 		public void SpawnMoneyBag(Vector3 position, Quaternion rotation, string variantName = MoneyBag.DEFAULTVARIANT)
