@@ -1,4 +1,5 @@
 using Game.Bank;
+using Game.Events;
 using ianco99.ToolBox.Events;
 using ianco99.ToolBox.Services;
 using UnityEngine;
@@ -32,6 +33,8 @@ public class TruckController : MonoBehaviour
 	private InputAction gasAction;
 	private InputAction brakeAction;
 
+	private bool canDrive;
+
 	void Start()
 	{
 		rigidBody = GetComponent<Rigidbody>();
@@ -40,17 +43,35 @@ public class TruckController : MonoBehaviour
 
 		EventBus.Subscribe<StartMinigameEvent>(OnStartMinigame);
 		EventBus.Subscribe<EndMinigameEvent>(OnEndMinigame);
-		
-#if ANDROID_BUILD
-		uiPedals.gameObject.SetActive(true);
-#endif
+		EventBus.Subscribe<GameStartedEvent>(OnGameStarted);
 
-#if PC_BUILD
+		// Waits for every player to finish the tutorial
+		camera.gameObject.SetActive(false);
 		steeringWheel.gameObject.SetActive(false);
 		uiPedals.gameObject.SetActive(false);
+
+#if PC_BUILD
         steeringAction = input.actions["Steer"];
 		gasAction = input.actions["Gas"];
 		brakeAction = input.actions["Brake"];
+#endif
+	}
+
+	private void OnDestroy()
+	{
+		EventBus.UnSubscribe<StartMinigameEvent>(OnStartMinigame);
+		EventBus.UnSubscribe<EndMinigameEvent>(OnEndMinigame);
+		EventBus.UnSubscribe<GameStartedEvent>(OnGameStarted);
+	}
+
+	private void OnGameStarted(in GameStartedEvent callback)
+	{
+		canDrive = true;
+		camera.gameObject.SetActive(true);
+
+#if ANDROID_BUILD
+		steeringWheel.gameObject.SetActive(true);
+		uiPedals.gameObject.SetActive(true);
 #endif
 	}
 
@@ -72,6 +93,16 @@ public class TruckController : MonoBehaviour
 
 	void FixedUpdate()
 	{
+		if (!canDrive)
+		{
+			foreach (WheelControl wheel in wheels)
+			{
+				wheel.WheelCollider.motorTorque = 0f;
+				wheel.WheelCollider.brakeTorque = brakeTorque;
+			}
+			return;
+		}
+
 		float vInput = 0;
 		float hInput = 0;
 

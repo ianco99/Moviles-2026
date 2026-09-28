@@ -23,6 +23,9 @@ public class DepositTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if(other.GetComponent<TruckController>() == null)
+            return;
+        
         if (IsEmpty)
         {
             int pID = other.GetComponent<TruckController>().playerID;
