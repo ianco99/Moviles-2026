@@ -12,7 +12,7 @@ namespace Game
 
 		public const int MAX_PLAYER_SLOTS = 3;
 
-		private int currentPlayerSlots = -1;
+		private int currentPlayerSlots = 0;
 		
 		public float playerMoney;
 		EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
@@ -21,6 +21,15 @@ namespace Game
 		{
 			EventBus.Subscribe<PickUpMoneyRequestEvent>(OnPickUpMoney);
 			EventBus.Subscribe<EnterMinigameRequestEvent>(OnEnterMinigame);
+			EventBus.Subscribe<EndMinigameEvent>(OnEndMinigame);
+		}
+
+		private void OnEndMinigame(in EndMinigameEvent callback)
+		{
+			if (callback.playerID == playerId)
+			{
+				currentPlayerSlots = 0;
+			}
 		}
 
 		private void OnEnterMinigame(in EnterMinigameRequestEvent callback)

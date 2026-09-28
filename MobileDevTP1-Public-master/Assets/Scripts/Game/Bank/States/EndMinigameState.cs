@@ -9,12 +9,15 @@ namespace Game.Bank.States
         private EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
         
         private Animator truckAnimator;
+        private int playerID;
 
         private float elapsed;
-        
+        private bool hasRaisedEnd;
+
         public EndMinigameState(params object[] parameters)
         {
             truckAnimator = parameters[0] as Animator;
+            playerID = (int)parameters[1];
         }
         
         public override BehaviourActions GetOnEnterBehaviours(params object[] parameters)
@@ -25,6 +28,7 @@ namespace Game.Bank.States
             behaviourActions.AddMainThreadableBehaviour(0, () =>
             {
                 elapsed = 0;
+                hasRaisedEnd = false;
                 truckAnimator.SetTrigger("End");
             });
             
@@ -41,9 +45,10 @@ namespace Game.Bank.States
             {
                 elapsed += deltaTime;
 
-                if (elapsed >= 1.5f)
+                if (elapsed >= 1.5f && !hasRaisedEnd)
                 {
-                    EventBus.Raise<EndMinigameEvent>();
+                    hasRaisedEnd = true;
+                    EventBus.Raise<EndMinigameEvent>(playerID);
                 }
             });
             

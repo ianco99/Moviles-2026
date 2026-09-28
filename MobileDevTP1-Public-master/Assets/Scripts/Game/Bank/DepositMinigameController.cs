@@ -99,7 +99,7 @@ namespace Game.Bank
                     { GetCurrentBagIndex, bagsVisuals, playerInput, Time.deltaTime },
                 exitParametersPointer: () => new object[] { visualPCPrompts[3] });
 
-            fsm.AddState<EndMinigameState>((int)States.End, constructionParameters: new object[] { animator },
+            fsm.AddState<EndMinigameState>((int)States.End, constructionParameters: new object[] { animator, playerID },
                 updateParametersPointer: () => new object[] { Time.deltaTime });
 
             fsm.RegisterTransition((int)States.Start, Triggers.ReadyForInput.ToString(), (int)States.Left);
