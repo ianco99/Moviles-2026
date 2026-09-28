@@ -3,6 +3,7 @@ using ianco99.ToolBox.Events;
 using ianco99.ToolBox.Services;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class TruckController : MonoBehaviour
