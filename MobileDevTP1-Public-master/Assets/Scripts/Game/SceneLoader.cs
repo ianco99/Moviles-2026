@@ -40,7 +40,12 @@ namespace Game
 			EventBus.Raise<StartMultiPlayerEvent>();
 			Load("Gameplay2P");
 		}
-		
+
+		public void LoadMenuScene()
+		{
+			Load("MenuScene");
+		}
+
 		private void Load(string sceneName)
 		{
 			StartCoroutine(LoadRoutine(sceneName));
