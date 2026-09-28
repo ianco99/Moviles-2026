@@ -50,6 +50,7 @@ namespace Game.Bank.States
                 Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
                 if(readValue.x > 0.5f)
                 {
+                    visualBags[currentIndex].transform.position = targetPos;
                     EventBus.Raise<BagReachedEndEvent>();
                 }
             });
@@ -61,7 +62,7 @@ namespace Game.Bank.States
             
             actions.AddMainThreadableBehaviour(2, () =>
             {
-                visualBags[currentIndex].transform.position = Vector3.Lerp(startPos,targetPos, elapsed/0.5f);
+                visualBags[currentIndex].transform.position = Vector3.Lerp(startPos,targetPos, elapsed/0.2f);
             });
 
             return actions;
@@ -75,7 +76,7 @@ namespace Game.Bank.States
 			
             actions.AddMainThreadableBehaviour(0, () =>
             {
-                visualPrompt.SetActive(false);
+            visualPrompt.SetActive(false);
                 
             });
 

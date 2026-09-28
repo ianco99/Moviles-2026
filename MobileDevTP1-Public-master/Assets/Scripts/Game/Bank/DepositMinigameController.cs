@@ -65,17 +65,21 @@ namespace Game.Bank
         private float bagBonusElapsed;
         private bool isDiminishingBagBonus;
 
+        private Transform[] bagInitialParents;
         private Vector3[] bagInitialLocalPositions;
         private Quaternion[] bagInitialLocalRotations;
+        private readonly List<Coroutine> trackBagCoroutines = new List<Coroutine>();
 
         private FSM fsm;
 
         private void Start()
         {
+            bagInitialParents = new Transform[bagsVisuals.Length];
             bagInitialLocalPositions = new Vector3[bagsVisuals.Length];
             bagInitialLocalRotations = new Quaternion[bagsVisuals.Length];
             for (int i = 0; i < bagsVisuals.Length; i++)
             {
+                bagInitialParents[i] = bagsVisuals[i].transform.parent;
                 bagInitialLocalPositions[i] = bagsVisuals[i].transform.localPosition;
                 bagInitialLocalRotations[i] = bagsVisuals[i].transform.localRotation;
             }
@@ -171,10 +175,18 @@ namespace Game.Bank
 
         private void ResetAndReparentBags()
         {
+            // TrackBag outlives the End state, so stop it or it keeps dragging bags after the reset
+            foreach (Coroutine coroutine in trackBagCoroutines)
+            {
+                if (coroutine != null)
+                    StopCoroutine(coroutine);
+            }
+            trackBagCoroutines.Clear();
+
             for (int i = 0; i < bagsVisuals.Length; i++)
             {
                 Transform bagTransform = bagsVisuals[i].transform;
-                bagTransform.SetParent(animator.transform, false);
+                bagTransform.SetParent(bagInitialParents[i], false);
                 bagTransform.localPosition = bagInitialLocalPositions[i];
                 bagTransform.localRotation = bagInitialLocalRotations[i];
             }
@@ -196,7 +208,7 @@ namespace Game.Bank
 
         private void OnBagReachedEnd(in BagReachedEndEvent callback)
         {
-            StartCoroutine(TrackBag(bagsVisuals[GetCurrentBagIndex]));
+            trackBagCoroutines.Add(StartCoroutine(TrackBag(bagsVisuals[GetCurrentBagIndex])));
             EventBus.Raise<BagBonusCollectedEvent>(playerID, currentBagBonus);
             currentBagsRemaining--;
             if (currentBagsRemaining <= 0)
@@ -225,6 +237,7 @@ namespace Game.Bank
                 playerInput.SwitchCurrentActionMap("Download2P");
 
             minigameParent.SetActive(true);
+            ResetAndReparentBags();
             currentBagsRemaining = bagsNumber;
             ResetBagBonus();
             fsm.ForceState((int)States.Start);

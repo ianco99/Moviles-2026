@@ -56,7 +56,7 @@ namespace Game.Bank.States
             
             actions.AddMainThreadableBehaviour(2, () =>
             {
-                visualBags[currentIndex].transform.position = Vector3.Lerp(startPos,targetPos, elapsed/0.5f);
+                visualBags[currentIndex].transform.position = Vector3.Lerp(startPos,targetPos, elapsed/0.2f);
             });
 
             return actions;
