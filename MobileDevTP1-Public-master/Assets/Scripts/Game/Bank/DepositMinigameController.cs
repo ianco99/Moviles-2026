@@ -18,6 +18,7 @@ namespace Game.Bank
         [SerializeField] private GameObject[] bagsVisuals;
         [SerializeField] private Transform[] bagTargetPos;
         [SerializeField] private PlayerInput playerInput;
+        [SerializeField] private SwipeInput swipeInput;
         [SerializeField] private Animator animator;
         [SerializeField] private Transform bagEndPos;
         [SerializeField] private GameObject minigameParent;
@@ -71,9 +72,20 @@ namespace Game.Bank
         private readonly List<Coroutine> trackBagCoroutines = new List<Coroutine>();
 
         private FSM fsm;
+        private GameObject[] visualPrompts;
 
         private void Start()
         {
+            HidePrompts(visualPCPrompts);
+            HidePrompts(visualPhonePrompts);
+
+#if PC_BUILD
+            visualPrompts = visualPCPrompts;
+#endif
+#if ANDROID_BUILD
+            visualPrompts = visualPhonePrompts;
+#endif
+
             bagInitialParents = new Transform[bagsVisuals.Length];
             bagInitialLocalPositions = new Vector3[bagsVisuals.Length];
             bagInitialLocalRotations = new Quaternion[bagsVisuals.Length];
@@ -105,24 +117,24 @@ namespace Game.Bank
 
             fsm.AddState<LeftMinigameState>((int)States.Left,
                 constructionParameters: new object[] { bagTargetPos[0].position },
-                enterParametersPointer: () => new object[] { visualPCPrompts[1], bagsVisuals, GetCurrentBagIndex },
+                enterParametersPointer: () => new object[] { visualPrompts[1], bagsVisuals, GetCurrentBagIndex },
                 updateParametersPointer: () => new object[]
-                    { GetCurrentBagIndex, bagsVisuals, playerInput, Time.deltaTime },
-                exitParametersPointer: () => new object[] { visualPCPrompts[1] });
+                    { GetCurrentBagIndex, bagsVisuals, swipeInput, Time.deltaTime },
+                exitParametersPointer: () => new object[] { visualPrompts[1] });
 
             fsm.AddState<DownMinigameState>((int)States.Down,
                 constructionParameters: new object[] { bagTargetPos[1].position },
-                enterParametersPointer: () => new object[] { visualPCPrompts[2], bagsVisuals, GetCurrentBagIndex },
+                enterParametersPointer: () => new object[] { visualPrompts[2], bagsVisuals, GetCurrentBagIndex },
                 updateParametersPointer: () => new object[]
-                    { GetCurrentBagIndex, bagsVisuals, playerInput, Time.deltaTime },
-                exitParametersPointer: () => new object[] { visualPCPrompts[2] });
+                    { GetCurrentBagIndex, bagsVisuals, swipeInput, Time.deltaTime },
+                exitParametersPointer: () => new object[] { visualPrompts[2] });
 
             fsm.AddState<RightMinigameState>((int)States.Right,
                 constructionParameters: new object[] { bagTargetPos[2].position },
-                enterParametersPointer: () => new object[] { visualPCPrompts[3], bagsVisuals, GetCurrentBagIndex },
+                enterParametersPointer: () => new object[] { visualPrompts[3], bagsVisuals, GetCurrentBagIndex },
                 updateParametersPointer: () => new object[]
-                    { GetCurrentBagIndex, bagsVisuals, playerInput, Time.deltaTime },
-                exitParametersPointer: () => new object[] { visualPCPrompts[3] });
+                    { GetCurrentBagIndex, bagsVisuals, swipeInput, Time.deltaTime },
+                exitParametersPointer: () => new object[] { visualPrompts[3] });
 
             fsm.AddState<EndMinigameState>((int)States.End, constructionParameters: new object[] { animator, playerID },
                 updateParametersPointer: () => new object[] { Time.deltaTime });
@@ -136,6 +148,12 @@ namespace Game.Bank
         {
             fsm.Update();
             UpdateBagBonus();
+        }
+
+        private void HidePrompts(GameObject[] prompts)
+        {
+            foreach (GameObject prompt in prompts)
+                prompt.SetActive(false);
         }
 
         private void UpdateBagBonus()

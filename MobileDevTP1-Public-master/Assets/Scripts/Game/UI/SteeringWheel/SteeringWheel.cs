@@ -53,9 +53,8 @@ public class SteeringWheel : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
 			visualWheel.localRotation = Quaternion.Euler(0f, 0f, angle);
 		}
 
-		Vector3 sas = new Vector3(1f, 0, 0);
-
-		TurnDir = -Vector3.Project(visualWheel.up, sas).x;
+		// Local space, the canvas follows the truck camera so world axes change as the truck turns
+		TurnDir = (visualWheel.localRotation * Vector3.up).x;
 	}
 
 	private Vector2 GetNormalizedPoint(Vector2 screenPos, Camera cam)

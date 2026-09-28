@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Game.States
 {
@@ -23,11 +22,11 @@ namespace Game.States
 		{
 			BehaviourActions actions = new BehaviourActions();
 
-			PlayerInput input = parameters[0] as PlayerInput;
+			SwipeInput input = parameters[0] as SwipeInput;
 
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
-				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
+				Vector2 readValue = input.ReadDirection();
 				if(readValue.y > 0.5f)
 				{
 					OnTrigger?.Invoke(TutorialController.Triggers.PressedUp.ToString());
@@ -76,11 +75,11 @@ namespace Game.States
 		{
 			BehaviourActions actions = new BehaviourActions();
 
-			PlayerInput input = parameters[0] as PlayerInput;
+			SwipeInput input = parameters[0] as SwipeInput;
 
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
-				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
+				Vector2 readValue = input.ReadDirection();
 				if(readValue.x < -0.5f)
 				{
 					OnTrigger?.Invoke(TutorialController.Triggers.PressedLeft.ToString());
@@ -128,11 +127,11 @@ namespace Game.States
 		{
 			BehaviourActions actions = new BehaviourActions();
 
-			PlayerInput input = parameters[0] as PlayerInput;
+			SwipeInput input = parameters[0] as SwipeInput;
 
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
-				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
+				Vector2 readValue = input.ReadDirection();
 				if(readValue.x > 0.5f)
 				{
 					OnTrigger?.Invoke(TutorialController.Triggers.PressedRight.ToString());
@@ -179,11 +178,11 @@ namespace Game.States
 		{
 			BehaviourActions actions = new BehaviourActions();
 
-			PlayerInput input = parameters[0] as PlayerInput;
+			SwipeInput input = parameters[0] as SwipeInput;
 
 			actions.AddMainThreadableBehaviour(0, () =>
 			{
-				Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
+				Vector2 readValue = input.ReadDirection();
 				if(readValue.y < -0.5f)
 				{
 					OnTrigger?.Invoke(TutorialController.Triggers.PressedDown.ToString());

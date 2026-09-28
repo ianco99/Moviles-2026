@@ -2115,6 +2115,7 @@ MonoBehaviour:
   - {fileID: 22028461}
   - {fileID: 1097963063}
   playerInput: {fileID: 373065398}
+  swipeInput: {fileID: 1554015423}
   animator: {fileID: 1222481414}
   bagEndPos: {fileID: 501269701}
   minigameParent: {fileID: 150084072}
@@ -5583,6 +5584,7 @@ GameObject:
   - component: {fileID: 289106234}
   - component: {fileID: 289106233}
   - component: {fileID: 289106232}
+  - component: {fileID: 289106235}
   m_Layer: 0
   m_Name: TutorialController
   m_TagString: Untagged
@@ -5636,6 +5638,7 @@ MonoBehaviour:
   playerID: 0
   animator: {fileID: 1269080858}
   playerInput: {fileID: 289106232}
+  swipeInput: {fileID: 289106235}
   tutorialRoot: {fileID: 1283245188}
   visualWASDPrompts:
   - {fileID: 182474533}
@@ -5668,6 +5671,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &289106235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 289106231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1f141da3ca024f4f99b537df712b023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.SwipeInput
+  playerInput: {fileID: 289106232}
+  screenRegion:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  minSwipeDistance: 0.08
+  maxSwipeDuration: 0.5
+  axisDominance: 2
 --- !u!1 &297542546
 GameObject:
   m_ObjectHideFlags: 0
@@ -7034,7 +7059,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 14bd48e2b6afc5b41b2897f52f92320a,
         type: 3}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6478701819847015776, guid: 6146fe1e3c7e97e44b72d93cf80add85, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 115628497065871962, guid: 6146fe1e3c7e97e44b72d93cf80add85,
@@ -29393,6 +29419,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1545840221}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1554015423 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3847344143198434770, guid: 6146fe1e3c7e97e44b72d93cf80add85,
+    type: 3}
+  m_PrefabInstance: {fileID: 373065397}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1f141da3ca024f4f99b537df712b023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.SwipeInput
 --- !u!1 &1554244085
 GameObject:
   m_ObjectHideFlags: 0

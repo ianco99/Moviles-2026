@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Game.Bank.States
 {
@@ -37,12 +36,12 @@ namespace Game.Bank.States
 
             int currentIndex = (int)parameters[0];
             GameObject[] visualBags = parameters[1] as GameObject[];
-            PlayerInput input = parameters[2] as PlayerInput;
+            SwipeInput input = parameters[2] as SwipeInput;
             float deltaTime = (float)parameters[3];
             
             actions.AddMainThreadableBehaviour(0, () =>
             {
-                Vector2 readValue = input.actions["Controls"].ReadValue<Vector2>();
+                Vector2 readValue = input.ReadDirection();
                 if(readValue.x < -0.5f)
                 {
                     OnTrigger?.Invoke(DepositMinigameController.Triggers.PressedLeft.ToString());

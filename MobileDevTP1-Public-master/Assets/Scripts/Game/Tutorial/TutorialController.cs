@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using Game.Events;
 using Game.States;
 using ianco99.ToolBox.Events;
@@ -32,6 +33,7 @@ public class TutorialController : MonoBehaviour
 	[SerializeField] private int playerID;
 	[SerializeField] private Animator animator;
 	[SerializeField] private PlayerInput playerInput;
+	[SerializeField] private SwipeInput swipeInput;
 	[SerializeField] private GameObject tutorialRoot;
 
 	[Header("Prompts (Up, Left, Down, Right)")]
@@ -71,10 +73,10 @@ public class TutorialController : MonoBehaviour
 
 		fsm = new FSM(Enum.GetValues(typeof(States)).Length, triggers);
 
-		fsm.AddState<TutorialStart>((int)States.Start, enterParametersPointer: () => new object[] {animator, visualPrompts[0]}, updateParametersPointer: () => new object[] { playerInput }, exitParametersPointer: () => new object[] { visualPrompts[0] });
-		fsm.AddState<TutorialLeft>((int)States.Left, enterParametersPointer: () => new object[] {animator, visualPrompts[1]}, updateParametersPointer: () => new object[] { playerInput }, exitParametersPointer: () => new object[] { visualPrompts[1] });
-		fsm.AddState<TutorialDown>((int)States.Down, enterParametersPointer: () => new object[] {animator, visualPrompts[2]}, updateParametersPointer: () => new object[] { playerInput }, exitParametersPointer: () => new object[] { visualPrompts[2] });
-		fsm.AddState<TutorialRight>((int)States.Right, enterParametersPointer: () => new object[] {animator, visualPrompts[3]}, updateParametersPointer: () => new object[] { playerInput }, exitParametersPointer: () => new object[] { visualPrompts[3] });
+		fsm.AddState<TutorialStart>((int)States.Start, enterParametersPointer: () => new object[] {animator, visualPrompts[0]}, updateParametersPointer: () => new object[] { swipeInput }, exitParametersPointer: () => new object[] { visualPrompts[0] });
+		fsm.AddState<TutorialLeft>((int)States.Left, enterParametersPointer: () => new object[] {animator, visualPrompts[1]}, updateParametersPointer: () => new object[] { swipeInput }, exitParametersPointer: () => new object[] { visualPrompts[1] });
+		fsm.AddState<TutorialDown>((int)States.Down, enterParametersPointer: () => new object[] {animator, visualPrompts[2]}, updateParametersPointer: () => new object[] { swipeInput }, exitParametersPointer: () => new object[] { visualPrompts[2] });
+		fsm.AddState<TutorialRight>((int)States.Right, enterParametersPointer: () => new object[] {animator, visualPrompts[3]}, updateParametersPointer: () => new object[] { swipeInput }, exitParametersPointer: () => new object[] { visualPrompts[3] });
 		fsm.AddState<TutorialWin>((int)States.Win, enterParametersPointer: () => new object[] {animator, visualGetReadyPrompt});
 
 		fsm.RegisterTransition((int)States.Start, Triggers.PressedUp.ToString(),(int)States.Left);
@@ -87,6 +89,8 @@ public class TutorialController : MonoBehaviour
 
 	private void Start()
 	{
+		playerInput.SwitchCurrentActionMap(playerID == 0 ? "Download" : "Download2P");
+
 		EventBus.Subscribe<GameStartedEvent>(OnGameStarted);
 	}
 

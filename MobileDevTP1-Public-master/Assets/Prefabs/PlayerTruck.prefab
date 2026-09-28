@@ -316,6 +316,8 @@ GameObject:
   - component: {fileID: 7923698305051359318}
   - component: {fileID: 8748545807398149596}
   - component: {fileID: 6005291430272760147}
+  - component: {fileID: 3847344143198434770}
+  - component: {fileID: 6478701819847015776}
   m_Layer: 0
   m_Name: PlayerTruck
   m_TagString: Player1
@@ -448,6 +450,50 @@ MonoBehaviour:
   m_DefaultActionMap: Truck
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &3847344143198434770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107535070853826543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1f141da3ca024f4f99b537df712b023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.SwipeInput
+  playerInput: {fileID: 6005291430272760147}
+  screenRegion:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  minSwipeDistance: 0.08
+  maxSwipeDuration: 0.5
+  axisDominance: 2
+--- !u!114 &6478701819847015776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107535070853826543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1f141da3ca024f4f99b537df712b023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.SwipeInput
+  playerInput: {fileID: 6005291430272760147}
+  screenRegion:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  minSwipeDistance: 0.08
+  maxSwipeDuration: 0.5
+  axisDominance: 2
 --- !u!1 &1607719095627516974
 GameObject:
   m_ObjectHideFlags: 0
@@ -1372,6 +1418,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f73037208f64b8e9fc6af32e819422b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.PlayerWalletManager
+  inventoryImages: []
+  inventory: []
+  moneyText: []
   playerId: 0
   playerMoney: 0
 --- !u!1 &9006852162387047311
