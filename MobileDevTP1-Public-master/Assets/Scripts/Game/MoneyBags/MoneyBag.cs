@@ -15,14 +15,33 @@ namespace MoneyBags
 		[SerializeField] private MeshRenderer meshRenderer;
 		[SerializeField] private SphereCollider sphereCollider;
 		[SerializeField] private Light light;
-		
+
+		[Header("Bobbing")]
+		[SerializeField] private float bobAmplitude = 0.25f;
+		[SerializeField] private float bobFrequency = 1.5f;
 
 		public float MoneyValue;
 		public uint id;
 
+		private Vector3 startPosition;
+		private float bobPhase;
+		private bool pickedUp;
+
 		private void Start()
 		{
+			startPosition = transform.position;
+			// Random phase so neighbouring bags don't bob in sync
+			bobPhase = UnityEngine.Random.Range(0f, 2f * Mathf.PI);
 			EventBus.Subscribe<PickUpMoneyAcceptedEvent>(OnPickUpMoney);
+		}
+
+		private void Update()
+		{
+			if (pickedUp)
+				return;
+
+			float offset = Mathf.Sin(Time.time * bobFrequency * 2f * Mathf.PI + bobPhase) * bobAmplitude;
+			transform.position = startPosition + Vector3.up * offset;
 		}
 
 		private void OnDestroy()
@@ -63,6 +82,7 @@ namespace MoneyBags
 
 		private void OnPickUp()
 		{
+			pickedUp = true;
 			pickUpParticles.Play();
 			sphereCollider.enabled = false;
 			meshRenderer.enabled = false;
