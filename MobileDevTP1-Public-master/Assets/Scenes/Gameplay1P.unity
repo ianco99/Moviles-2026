@@ -12011,8 +12011,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3671a1317a6458c45aadb8d6645311f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoneyBags.MoneyBagFactory
-  moneyBagPrefab: {fileID: 1176531702574923372, guid: ae11960b611adf34bb66beabdf0601c7,
-    type: 3}
   _moneyBagVariants:
   - {fileID: 11400000, guid: dd6a56f556fcc5f4c8872cfe50604da7, type: 2}
   spawnLocations:
@@ -18525,7 +18523,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &918715614
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33406,6 +33404,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1698153398}
   m_CullTransparentMesh: 1
+--- !u!1 &1700000011
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1700000012}
+  - component: {fileID: 1700000013}
+  m_Layer: 0
+  m_Name: BankStationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1700000012
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700000011}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1700000013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a66ada0417d428db03bcf1a0cf338a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Bank.BankStationManager
 --- !u!1 &1705056167
 GameObject:
   m_ObjectHideFlags: 0
@@ -39484,7 +39526,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2039413991
 RectTransform:
   m_ObjectHideFlags: 0
@@ -41193,3 +41235,4 @@ SceneRoots:
   - {fileID: 110478737}
   - {fileID: 600692109}
   - {fileID: 1686142449865896457}
+  - {fileID: 1700000012}

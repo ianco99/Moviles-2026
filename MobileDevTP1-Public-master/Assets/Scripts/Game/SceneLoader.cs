@@ -65,6 +65,19 @@ namespace Game
 			Load("MenuScene");
 		}
 
+		public void LoadCreditsScene()
+		{
+			if (Instance != this)
+			{
+				Instance.LoadCreditsScene();
+				return;
+			}
+
+			// Credits live inside the menu scene, the menu opens them on load
+			MainMenuController.OpenCreditsOnLoad = true;
+			Load("MenuScene");
+		}
+
 		private void Load(string sceneName)
 		{
 			StartCoroutine(LoadRoutine(sceneName));
@@ -97,6 +110,9 @@ namespace Game
 
 			operation.allowSceneActivation = true;
 			yield return operation;
+
+			// Frees the assets the previous scene loaded at runtime (like the money bag prefab from Resources)
+			yield return Resources.UnloadUnusedAssets();
 
 			yield return loadingScreen.FadeOut();
 			loadingScreen.Hide();

@@ -1,0 +1,162 @@
+PATRONES DE DISEÑO - CityTruckRunner (adaptación móvil del TP1 Camiones)
+=========================================================================
+
+El proyecto implementa los siguientes patrones. Para cada uno se indica QUÉ es,
+DÓNDE está, CÓMO se usa y QUÉ PROBLEMA resuelve.
+
+
+1. STATE / MÁQUINA DE ESTADOS FINITOS (FSM)
+-------------------------------------------
+Dónde:
+  - Assets/Scripts/Game/States/FSM.cs               (la máquina de estados)
+  - Assets/Scripts/Game/States/State.cs             (clase base abstracta de cada estado)
+  - Assets/Scripts/Game/States/BehaviourActions.cs  (acciones que devuelve cada estado)
+  - Tutorial: Assets/Scripts/Game/Tutorial/TutorialController.cs
+      estados TutorialStart, TutorialLeft, TutorialDown, TutorialRight, TutorialWin
+      (Assets/Scripts/Game/States/TutorialStart.cs)
+  - Minijuego de descarga: Assets/Scripts/Game/Bank/DepositMinigameController.cs
+      estados StartMinigameState, LeftMinigameState, DownMinigameState,
+      RightMinigameState, EndMinigameState (Assets/Scripts/Game/Bank/States/)
+
+Cómo:
+  Cada paso del tutorial y del minijuego es una clase que hereda de State y
+  define su comportamiento al entrar (GetOnEnterBehaviours), en cada frame
+  (GetTickBehaviours) y al salir (GetOnExitBehaviours). El controlador crea la
+  FSM, registra los estados con AddState y las transiciones con
+  RegisterTransition(estadoOrigen, trigger, estadoDestino). Cuando un estado
+  detecta el input correcto (por ejemplo, un swipe o una tecla hacia la
+  izquierda) dispara OnTrigger con el nombre del trigger y la FSM pasa al
+  estado siguiente. El controlador solo llama a fsm.Update() cada frame.
+
+Problema que resuelve:
+  El tutorial y el minijuego son secuencias de pasos donde cada paso espera
+  un input distinto, muestra un indicador distinto y mueve la bolsa de otra
+  forma. Sin la FSM esto sería un Update lleno de if/switch y flags booleanos
+  difíciles de mantener. Con el patrón, cada paso queda aislado en su propia
+  clase, el orden de los pasos se define en un solo lugar (las transiciones)
+  y agregar o reordenar pasos no obliga a tocar los demás estados.
+
+
+2. OBSERVER (EVENT BUS)
+-----------------------
+Dónde:
+  - Assets/Scripts/ToolBox/Events/EventBus.cs
+  - Assets/Scripts/ToolBox/Events/IEvent.cs
+  - Eventos del juego: Assets/Scripts/Game/Events/ (GameStartedEvent,
+    GameTimerEndedEvent, TutorialCompletedEvent, StartSinglePlayerEvent,
+    StartMultiPlayerEvent), Assets/Scripts/Game/Bank/ (StartMinigameEvent,
+    EndMinigameEvent, EnterMinigameRequestEvent, BagBonusCollectedEvent, ...)
+    y Assets/Scripts/Game/MoneyBags/ (PickUpMoneyRequestEvent,
+    PickUpMoneyAcceptedEvent, ...)
+
+Cómo:
+  Los sistemas se suscriben a un tipo de evento con
+  EventBus.Subscribe<TipoDeEvento>(callback) y se desuscriben en OnDestroy.
+  Quien produce el evento llama a EventBus.Raise<TipoDeEvento>(parámetros)
+  sin saber quién lo escucha. Ejemplos:
+    - GameManager lanza GameTimerEndedEvent y ScoreController lo escucha
+      para mostrar los puntajes.
+    - MoneyBag lanza PickUpMoneyRequestEvent; PlayerWalletManager lo valida
+      (espacio en el camión) y responde con PickUpMoneyAcceptedEvent.
+    - Cada TutorialController lanza TutorialCompletedEvent y GameManager
+      arranca la partida cuando terminaron todos los jugadores.
+
+Problema que resuelve:
+  Muchos sistemas tienen que reaccionar a lo mismo (fin del tiempo, inicio de
+  la partida, entrada al minijuego) y además en multijugador hay varias
+  instancias de cada cosa. Con referencias directas entre scripts todo
+  quedaría acoplado y habría que cablear cada objeto en el Inspector. Con el
+  EventBus los emisores y los receptores no se conocen: los eventos llevan
+  el playerID y cada receptor filtra los suyos, lo que permitió pasar de 1 a
+  2 jugadores sin cambiar la comunicación entre sistemas.
+
+
+3. SERVICE LOCATOR
+------------------
+Dónde:
+  - Assets/Scripts/ToolBox/ServiceProvider/ServiceProvider.cs
+  - Assets/Scripts/ToolBox/ServiceProvider/IService.cs
+  - Registro: Assets/Scripts/Game/GameManager.cs (Awake)
+  - Uso: prácticamente todos los scripts del juego mediante
+    ServiceProvider.Instance.GetService<EventBus>()
+
+Cómo:
+  ServiceProvider guarda los servicios en un diccionario indexado por tipo.
+  GameManager registra un EventBus nuevo al cargar cada escena de gameplay
+  (con DefaultExecutionOrder(-1000) para que exista antes que el resto) y
+  elimina el de la escena anterior. Los demás scripts lo obtienen con
+  GetService<EventBus>() sin necesitar una referencia serializada.
+
+Problema que resuelve:
+  Da un único punto de acceso a servicios compartidos sin tener que
+  arrastrar referencias en el Inspector a cada prefab (camiones, bolsas,
+  bancos) ni usar FindObjectOfType. Además permite reemplazar el servicio
+  por escena: al recrear el EventBus en cada carga, ningún suscriptor de la
+  escena anterior recibe eventos de la nueva.
+
+
+4. FACTORY
+----------
+Dónde:
+  - Assets/Scripts/Game/MoneyBags/MoneyBagFactory.cs
+  - Assets/Scripts/Game/MoneyBags/MoneyBagSO.cs (variantes como ScriptableObject)
+  - Prefab: Assets/Resources/MoneyBag.prefab
+
+Cómo:
+  MoneyBagFactory es el único responsable de crear bolsas de dinero. Carga el
+  prefab en runtime con Resources.Load, arma un diccionario de variantes
+  (MoneyBagSO) por nombre y expone SpawnMoneyBag(posición, rotación,
+  variante), que instancia la bolsa, le asigna el valor de la variante y un
+  id único. Al iniciar decide cuántas bolsas crear según la dificultad y la
+  cantidad de jugadores guardadas en PlayerPrefs.
+
+Problema que resuelve:
+  Centraliza la creación de bolsas: la lógica de cuántas crear, dónde, con
+  qué valor e id queda en un solo lugar en vez de repartida en la escena.
+  Quien necesita una bolsa no conoce el prefab ni cómo inicializarla, y
+  agregar una variante nueva (otro valor de dinero) es crear un
+  ScriptableObject, sin tocar código.
+
+
+5. SINGLETON
+------------
+Dónde:
+  - Assets/Scripts/Game/SceneLoader.cs (SceneLoader.Instance)
+  - También ServiceProvider.Instance (ServiceProvider.cs)
+
+Cómo:
+  SceneLoader guarda su instancia en una propiedad estática Instance y usa
+  DontDestroyOnLoad para sobrevivir a los cambios de escena. Si al volver al
+  menú aparece otra copia, esa copia no toma el control: le delega las
+  llamadas de los botones a la instancia persistente. Cualquier script puede
+  pedir un cambio de escena con SceneLoader.Instance.LoadMenuScene(),
+  LoadCreditsScene(), etc.
+
+Problema que resuelve:
+  La carga asincrónica con pantalla de transición tiene que seguir viva
+  mientras la escena de origen se descarga y la nueva se activa. Una única
+  instancia persistente garantiza que haya un solo cargador, que no se
+  lancen dos cargas a la vez y que sea accesible desde cualquier escena
+  (por ejemplo, ScoreController al terminar la partida).
+
+
+6. OBJECT POOL
+--------------
+Dónde:
+  - Assets/Scripts/ToolBox/ConcurrentPool/ConcurrentPool.cs
+  - Assets/Scripts/ToolBox/ConcurrentPool/IResettable.cs
+  - Uso: dentro de EventBus.Raise (Assets/Scripts/ToolBox/Events/EventBus.cs)
+
+Cómo:
+  Cada evento implementa IResettable (Assign para cargar sus datos y Reset
+  para limpiarlos). Al lanzar un evento, EventBus pide una instancia al pool
+  (Get), la reparte a los suscriptores y la devuelve al pool (Release) para
+  reutilizarla en el próximo Raise del mismo tipo.
+
+Problema que resuelve:
+  Los eventos se lanzan muy seguido durante el gameplay. El pool centraliza
+  cómo se crean y se limpian: cada Raise obtiene una instancia inicializada
+  con Assign y, al terminar, Reset la deja limpia antes de volver al pool,
+  así ningún evento arrastra datos de un Raise anterior. Además, el pool es
+  genérico y thread-safe (ConcurrentDictionary/ConcurrentStack), por lo que
+  sirve para cualquier tipo que implemente IResettable.

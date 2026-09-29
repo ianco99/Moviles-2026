@@ -13,16 +13,26 @@ namespace MoneyBags
 
 		private const int BagsRestoredPerExtraPlayer = 2;
 
-		[SerializeField] private MoneyBag moneyBagPrefab;
+		// Path inside Assets/Resources, the prefab is loaded at runtime instead of being referenced by the scene
+		private const string MoneyBagPrefabPath = "MoneyBag";
+
 		[SerializeField] private MoneyBagSO[] _moneyBagVariants;
 		[SerializeField] private Transform[] spawnLocations;
 
 		private Dictionary<string, MoneyBagSO> _moneyBags = new Dictionary<string, MoneyBagSO>();
+		private MoneyBag moneyBagPrefab;
 
 		private uint moneyBagId = 0;
 
 		private void Awake()
 		{
+			moneyBagPrefab = Resources.Load<MoneyBag>(MoneyBagPrefabPath);
+			if (moneyBagPrefab == null)
+			{
+				Debug.LogError($"Money bag prefab not found at Resources/{MoneyBagPrefabPath}.");
+				return;
+			}
+
 			//cache for future use
 			foreach (MoneyBagSO moneyBag in _moneyBagVariants)
 			{

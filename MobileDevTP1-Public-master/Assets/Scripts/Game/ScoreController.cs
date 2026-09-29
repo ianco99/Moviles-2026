@@ -71,7 +71,7 @@ namespace Game
 		private IEnumerator ReturnToMenuRoutine()
 		{
 			yield return new WaitForSecondsRealtime(returnToMenuDelay);
-			SceneLoader.Instance.LoadMenuScene();
+			SceneLoader.Instance.LoadCreditsScene();
 		}
 
 		private static string FormatMoney(float money)
