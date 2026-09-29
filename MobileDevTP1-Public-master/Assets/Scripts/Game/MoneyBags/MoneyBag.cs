@@ -54,13 +54,10 @@ namespace MoneyBags
 
 		private void OnTriggerEnter(Collider other)
 		{
-			if (other.tag == "Player1")
+			// Read the id from the truck itself, both trucks share the prefab tag
+			if (other.TryGetComponent(out TruckController truck))
 			{
-				EventBus.Raise<PickUpMoneyRequestEvent>(0, MoneyValue, id);
-			}
-			else if (other.tag == "Player2")
-			{
-				EventBus.Raise<PickUpMoneyRequestEvent>(1, MoneyValue, id);
+				EventBus.Raise<PickUpMoneyRequestEvent>(truck.playerID, MoneyValue, id);
 			}
 		}
 

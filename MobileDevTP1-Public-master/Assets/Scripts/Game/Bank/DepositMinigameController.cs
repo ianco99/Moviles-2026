@@ -130,7 +130,7 @@ namespace Game.Bank
                 exitParametersPointer: () => new object[] { visualPrompts[2] });
 
             fsm.AddState<RightMinigameState>((int)States.Right,
-                constructionParameters: new object[] { bagTargetPos[2].position },
+                constructionParameters: new object[] { bagTargetPos[2].position, playerID },
                 enterParametersPointer: () => new object[] { visualPrompts[3], bagsVisuals, GetCurrentBagIndex },
                 updateParametersPointer: () => new object[]
                     { GetCurrentBagIndex, bagsVisuals, swipeInput, Time.deltaTime },
@@ -233,6 +233,9 @@ namespace Game.Bank
 
         private void OnBagReachedEnd(in BagReachedEndEvent callback)
         {
+            if (callback.playerID != playerID)
+                return;
+
             trackBagCoroutines.Add(StartCoroutine(TrackBag(bagsVisuals[GetCurrentBagIndex])));
             EventBus.Raise<BagBonusCollectedEvent>(playerID, currentBagBonus);
             currentBagsRemaining--;

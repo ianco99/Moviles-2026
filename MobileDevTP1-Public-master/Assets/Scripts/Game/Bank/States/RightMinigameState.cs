@@ -11,9 +11,11 @@ namespace Game.Bank.States
         private Vector3 targetPos;
         private Vector3 startPos;
         private float elapsed;
+        private int playerID;
         public RightMinigameState(params object[] parameters)
         {
             targetPos = (Vector3)parameters[0];
+            playerID = (int)parameters[1];
         }
         
         public override BehaviourActions GetOnEnterBehaviours(params object[] parameters)
@@ -50,7 +52,7 @@ namespace Game.Bank.States
                 if(readValue.x > 0.5f)
                 {
                     visualBags[currentIndex].transform.position = targetPos;
-                    EventBus.Raise<BagReachedEndEvent>();
+                    EventBus.Raise<BagReachedEndEvent>(playerID);
                 }
             });
             
