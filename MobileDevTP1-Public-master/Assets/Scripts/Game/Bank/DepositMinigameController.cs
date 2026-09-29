@@ -32,9 +32,9 @@ namespace Game.Bank
 
         private int GetCurrentBagIndex => currentBagsRemaining - 1;
 
-        private Func<int> dad => Coso;
+        private Func<int> GetBagsFunc => GetBags;
 
-        private int Coso()
+        private int GetBags()
         {
             return GetCurrentBags;
         }
@@ -112,7 +112,7 @@ namespace Game.Bank
             fsm = new FSM(Enum.GetValues(typeof(States)).Length, triggers);
 
             fsm.AddState<StartMinigameState>((int)States.Start,
-                constructionParameters: new object[] { dad, bagsVisuals, animator }, updateParametersPointer:
+                constructionParameters: new object[] { GetBagsFunc, bagsVisuals, animator }, updateParametersPointer:
                 () => new object[] { Time.deltaTime });
 
             fsm.AddState<LeftMinigameState>((int)States.Left,

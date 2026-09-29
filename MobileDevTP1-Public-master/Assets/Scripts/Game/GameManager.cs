@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace Game
 {
-	// Runs before every other script so the fresh EventBus exists before anyone subscribes on Awake
 	[DefaultExecutionOrder(-1000)]
 	public class GameManager : MonoBehaviour
 	{
@@ -24,7 +23,6 @@ namespace Game
 
 		private void Awake()
 		{
-			// Every scene gets its own EventBus so subscribers from the previous scene never receive events
 			if (ServiceProvider.Instance.ContainsService<EventBus>())
 				ServiceProvider.Instance.RemoveService<EventBus>();
 			ServiceProvider.Instance.AddService<EventBus>(new EventBus());
@@ -36,13 +34,11 @@ namespace Game
 
 		private void Start()
 		{
-			// Every player in the scene has their own tutorial, all of them must be finished to start
 			expectedTutorials = FindObjectsByType<TutorialController>(FindObjectsSortMode.None).Length;
 		}
 
 		private void Update()
 		{
-			// Started from Update so every listener has already subscribed on its Start
 			if (!gameStarted && expectedTutorials == 0)
 				StartGame();
 

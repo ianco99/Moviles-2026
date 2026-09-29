@@ -13,7 +13,6 @@ namespace MoneyBags
 
 		private const int BagsRestoredPerExtraPlayer = 2;
 
-		// Path inside Assets/Resources, the prefab is loaded at runtime instead of being referenced by the scene
 		private const string MoneyBagPrefabPath = "MoneyBag";
 
 		[SerializeField] private MoneyBagSO[] _moneyBagVariants;
@@ -33,7 +32,6 @@ namespace MoneyBags
 				return;
 			}
 
-			//cache for future use
 			foreach (MoneyBagSO moneyBag in _moneyBagVariants)
 			{
 				_moneyBags.Add(moneyBag.VariantName, moneyBag);
@@ -68,13 +66,22 @@ namespace MoneyBags
 			int difficulty = PlayerPrefs.GetInt("Difficulty", 0);
 			int playerCount = PlayerPrefs.GetInt("PlayerCount", MinPlayerCount);
 
-			int bagsToRemove = difficulty switch
+			int bagsToRemove;
+			switch (difficulty)
 			{
-				0 => BagsToRemoveEasy,
-				1 => BagsToRemoveMedium,
-				2 => BagsToRemoveHard,
-				_ => BagsToRemoveEasy
-			};
+				case 0:
+					bagsToRemove = BagsToRemoveEasy;
+					break;
+				case 1:
+					bagsToRemove = BagsToRemoveMedium;
+					break;
+				case 2:
+					bagsToRemove = BagsToRemoveHard;
+					break;
+				default:
+					bagsToRemove = BagsToRemoveEasy;
+					break;
+			}
 
 			int extraPlayers = Mathf.Max(0, playerCount - MinPlayerCount);
 			bagsToRemove -= extraPlayers * BagsRestoredPerExtraPlayer;

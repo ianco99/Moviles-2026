@@ -1,0 +1,62 @@
+Alumno: Ian Kuznicki
+
+Desarrollo de Videojuegos para Dispositivos Móviles
+Rodrigo Corral
+2026
+
+
+Patrones de diseño utilizados:
+-Singleton
+-State
+-Observer
+-Service Provider
+-Factory
+-Object Pool
+
+Muchos de estos patrones se utilizan dentro de una subcarpeta del proyecto llamada "ToolBox". Los scripts hayados en esta carpeta son de mi autoría, y son utilizados en múltiples proyectos por las facilidades que ofrecen.
+
+Patrón por patrón:
+
+1. Singleton
+
+-SceneLoader.cs
+Controlador de carga y descarga asíncrona de escenas del juego. Contiene referencias a imagenes que se superponen al juego para mostrar una pantalla de carga.
+
+
+-ServiceProvider.cs
+Service Locator. Intermediario entre cualquier clase del proyecto que necesite acceder a información que pueda considerarse "global" o de relevancia para múltiples clases, un servicio.
+
+
+-AudioManager.cs
+Contenedor de clips de audio genéricos (botónes) y reproductor de música por escena.
+
+
+2. State
+
+-TutorialController.cs
+Utiliza una Finite State Machine para manejar el funcionamiento del tutorial de descarga. Contiene todos los campos necesarios para todos los estados de la FSM, y maneja sus transiciones con el enum Triggers.
+
+-DepositMinigameController.cs
+Similar al tutorial, esta clase cuenta con una fsm para manejar los estados y triggers para cada parte del minijuego de descarga. Se comunica también con PlayerWalletManager.cs para acceder a la cantidad de bolsas que tiene el jugador (la cantidad de veces que se debe repetir el minijuego de carga).
+
+
+3. Observer
+
+-EventBus
+Columna vertebral de la comunicación en el proyecto. Todas las clases que utilizan eventos de C# de alguna manera se comunican a través del EventBus. Usa una ConcurrentPool para manejar instancias de IEvents, que son reutilizados entre los diferentes eventos del juego (que heredan de IEvent todos). Es instanciado por GameManager.
+
+
+4. ServiceProvider
+
+-ServiceProvider.cs
+Maneja múltiples instancias de servicios. Intermediario entre varias clases que los acceden.
+
+5. Factory
+
+-MoneyBagFactory.cs
+Accede al prefab de bolsa de dinero. Instancia prefabs y le asigna valor de dinero obtenido dependiendo la instancia de bolsa de dinero que se quiera instanciar. Cada instancia tiene un ScriptableObject que determina el valor obtenido por recoger cada bolsa de dinero. En un futuro este ScriptableObject podria usarse también para, por ejemplo, tener un material distinto por tipo de bolsa de dinero instanciada. 
+
+
+6. Object Pool
+Los eventos de EventBus son utilizandos y retornados a una pool común de eventos. Es concurrente para facilitar su utilización en aplicaciones multithreading (necesario en materias como Multiplayer e IA), aunque en este proyecto no se utiliza de esa manera.
+
