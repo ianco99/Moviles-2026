@@ -5,6 +5,7 @@
 - [Release](#-release)
 - [Design Pattern Guide](#-design-pattern-guide)
 - [License](#-license)
+- [Socials](#-socials)
 
 
 
@@ -26,3 +27,7 @@ design patterns used in the realization of this project. This document was part 
 
 ## License
 This project is under the MIT License usage.
+
+## Socials
+
+You can follow me for more updates on future projects of mine on my [Itch.io Website](https://iankuz25.itch.io/) or [LinkedIn profile](https://www.linkedin.com/in/ian-kuznicki/).
