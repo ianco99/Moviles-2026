@@ -1,3 +1,4 @@
+using System.Collections;
 using Game.Bank;
 using Game.Events;
 using ianco99.ToolBox.Events;
@@ -18,6 +19,9 @@ public class TruckController : MonoBehaviour
 	[SerializeField] private Camera camera;
 	[SerializeField] private SteeringWheel steeringWheel;
 	[SerializeField] private UIPedals uiPedals;
+
+	[Header("Control Hints")] [SerializeField] private Image[] controlHints = new Image[4];
+	[SerializeField] private float controlHintsDuration = 5f;
 
 	[Header("Car Properties")] public float motorTorque = 2000f;
 	public float brakeTorque = 2000f;
@@ -53,6 +57,7 @@ public class TruckController : MonoBehaviour
 		camera.gameObject.SetActive(false);
 		steeringWheel.gameObject.SetActive(false);
 		uiPedals.gameObject.SetActive(false);
+		SetControlHintsVisible(false);
 
 #if PC_BUILD
         steeringAction = input.actions["Steer"];
@@ -77,6 +82,27 @@ public class TruckController : MonoBehaviour
 		steeringWheel.gameObject.SetActive(true);
 		uiPedals.gameObject.SetActive(true);
 #endif
+
+#if PC_BUILD
+		// Mobile already shows the steering wheel and pedals, only PC needs key hints
+		StartCoroutine(ShowControlHints());
+#endif
+	}
+
+	private IEnumerator ShowControlHints()
+	{
+		SetControlHintsVisible(true);
+		yield return new WaitForSeconds(controlHintsDuration);
+		SetControlHintsVisible(false);
+	}
+
+	private void SetControlHintsVisible(bool visible)
+	{
+		foreach (Image hint in controlHints)
+		{
+			if (hint != null)
+				hint.gameObject.SetActive(visible);
+		}
 	}
 
 	private void OnEndMinigame(in EndMinigameEvent callback)

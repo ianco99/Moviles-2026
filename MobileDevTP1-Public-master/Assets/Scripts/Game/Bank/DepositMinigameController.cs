@@ -239,11 +239,11 @@ namespace Game.Bank
             trackBagCoroutines.Add(StartCoroutine(TrackBag(bagsVisuals[GetCurrentBagIndex])));
             EventBus.Raise<BagBonusCollectedEvent>(playerID, currentBagBonus);
             currentBagsRemaining--;
+            ResetBagBonus();
             if (currentBagsRemaining <= 0)
                 fsm.ForceState((int)States.End);
             else
             {
-                ResetBagBonus();
                 UnparentCurrentBag();
                 fsm.ForceState((int)States.Left);
             }

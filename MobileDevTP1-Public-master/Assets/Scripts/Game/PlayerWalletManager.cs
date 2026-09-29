@@ -18,6 +18,7 @@ namespace Game
         public const int MAX_PLAYER_SLOTS = 3;
 
         private int currentPlayerSlots = 0;
+        private bool isInMinigame;
 
         public float playerMoney;
         EventBus EventBus => ServiceProvider.Instance.GetService<EventBus>();
@@ -56,6 +57,7 @@ namespace Game
         {
             if (callback.playerID == playerId)
             {
+                isInMinigame = false;
                 currentPlayerSlots = 0;
                 inventory[0].sprite = inventoryImages[0];
                 inventory[1].sprite = inventoryImages[0];
@@ -66,8 +68,10 @@ namespace Game
         {
             if (callback.playerId == playerId)
             {
-                if (currentPlayerSlots > 0)
+                // Re-entering the trigger mid-minigame would restart it and replay the truck animation
+                if (currentPlayerSlots > 0 && !isInMinigame)
                 {
+                    isInMinigame = true;
                     EventBus.Raise<StartMinigameEvent>(playerId, currentPlayerSlots);
                 }
             }

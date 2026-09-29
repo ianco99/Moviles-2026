@@ -8313,7 +8313,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &947363009
 Light:
   m_ObjectHideFlags: 0
@@ -15081,6 +15081,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerTruck (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1107535070853826543, guid: 6146fe1e3c7e97e44b72d93cf80add85,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1482714046479970079, guid: 6146fe1e3c7e97e44b72d93cf80add85,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -17547,7 +17552,7 @@ PrefabInstance:
     - target: {fileID: 4143539209133114306, guid: 6146fe1e3c7e97e44b72d93cf80add85,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
