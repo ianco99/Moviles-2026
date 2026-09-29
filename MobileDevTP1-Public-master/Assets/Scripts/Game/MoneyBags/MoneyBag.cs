@@ -25,6 +25,11 @@ namespace MoneyBags
 			EventBus.Subscribe<PickUpMoneyAcceptedEvent>(OnPickUpMoney);
 		}
 
+		private void OnDestroy()
+		{
+			EventBus.UnSubscribe<PickUpMoneyAcceptedEvent>(OnPickUpMoney);
+		}
+
 		private void OnPickUpMoney(in PickUpMoneyAcceptedEvent callback)
 		{
 			if (callback.id == id)

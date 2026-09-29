@@ -144,6 +144,13 @@ namespace Game.Bank
             fsm.RegisterTransition((int)States.Down, Triggers.PressedDown.ToString(), (int)States.Right);
         }
 
+        private void OnDestroy()
+        {
+            EventBus.UnSubscribe<StartMinigameEvent>(OnStartMinigame);
+            EventBus.UnSubscribe<BagReachedEndEvent>(OnBagReachedEnd);
+            EventBus.UnSubscribe<EndMinigameEvent>(OnEndMinigame);
+        }
+
         private void Update()
         {
             fsm.Update();

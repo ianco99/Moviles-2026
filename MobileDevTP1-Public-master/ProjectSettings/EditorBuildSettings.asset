@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Gameplay1P.unity
     guid: 6e915d12d3f2a854e918d9b8217525b5
   - enabled: 1
-    path: Assets/Scenes/Old/Gameplay2P.unity
-    guid: beab933d4d92ec54c9fc736e2090bd20
+    path: Assets/Scenes/Gameplay2P.unity
+    guid: 5b96f95456b162446a3f075c6622574a
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

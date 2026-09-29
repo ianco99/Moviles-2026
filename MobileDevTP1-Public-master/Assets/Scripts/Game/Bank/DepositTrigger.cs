@@ -15,6 +15,11 @@ public class DepositTrigger : MonoBehaviour
         EventBus.Subscribe<EnterMinigameAcceptEvent>(OnEnterMinigame);
     }
 
+    private void OnDestroy()
+    {
+        EventBus.UnSubscribe<EnterMinigameAcceptEvent>(OnEnterMinigame);
+    }
+
     private void OnEnterMinigame(in EnterMinigameAcceptEvent callback)
     {
         IsEmpty = false;

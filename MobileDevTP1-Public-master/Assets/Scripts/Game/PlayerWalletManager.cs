@@ -30,6 +30,14 @@ namespace Game
             EventBus.Subscribe<BagBonusCollectedEvent>(OnBagBonusCollected);
         }
 
+        private void OnDestroy()
+        {
+            EventBus.UnSubscribe<PickUpMoneyRequestEvent>(OnPickUpMoney);
+            EventBus.UnSubscribe<EnterMinigameRequestEvent>(OnEnterMinigame);
+            EventBus.UnSubscribe<EndMinigameEvent>(OnEndMinigame);
+            EventBus.UnSubscribe<BagBonusCollectedEvent>(OnBagBonusCollected);
+        }
+
         private void Update()
         {
             moneyText[0].text = "$" + (int)playerMoney;

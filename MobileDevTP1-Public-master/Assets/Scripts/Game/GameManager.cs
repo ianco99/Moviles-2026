@@ -7,6 +7,8 @@ using UnityEngine;
 
 namespace Game
 {
+	// Runs before every other script so the fresh EventBus exists before anyone subscribes on Awake
+	[DefaultExecutionOrder(-1000)]
 	public class GameManager : MonoBehaviour
 	{
 		private const float GameDuration = 60f;
@@ -22,6 +24,9 @@ namespace Game
 
 		private void Awake()
 		{
+			// Every scene gets its own EventBus so subscribers from the previous scene never receive events
+			if (ServiceProvider.Instance.ContainsService<EventBus>())
+				ServiceProvider.Instance.RemoveService<EventBus>();
 			ServiceProvider.Instance.AddService<EventBus>(new EventBus());
 
 			EventBus.Subscribe<StartSinglePlayerEvent>(OnSinglePlayerHandle);

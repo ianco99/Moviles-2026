@@ -21,7 +21,8 @@ namespace Game
 		{
 			if (Instance != null && Instance != this)
 			{
-				Destroy(gameObject);
+				// Scene buttons reference this copy, so keep it alive as a proxy to the persistent instance
+				loadingScreen.gameObject.SetActive(false);
 				return;
 			}
 
@@ -31,18 +32,36 @@ namespace Game
 
 		public void LoadSingleplayerScene()
 		{
+			if (Instance != this)
+			{
+				Instance.LoadSingleplayerScene();
+				return;
+			}
+
 			EventBus.Raise<StartSinglePlayerEvent>();
 			Load("Gameplay1P");
 		}
 
 		public void LoadMultiplayerScene()
 		{
+			if (Instance != this)
+			{
+				Instance.LoadMultiplayerScene();
+				return;
+			}
+
 			EventBus.Raise<StartMultiPlayerEvent>();
 			Load("Gameplay2P");
 		}
 
 		public void LoadMenuScene()
 		{
+			if (Instance != this)
+			{
+				Instance.LoadMenuScene();
+				return;
+			}
+
 			Load("MenuScene");
 		}
 

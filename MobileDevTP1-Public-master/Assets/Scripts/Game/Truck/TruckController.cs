@@ -35,6 +35,10 @@ public class TruckController : MonoBehaviour
 
 	private bool canDrive;
 
+	// Read by the engine audio
+	public float Throttle { get; private set; }
+	public float SpeedFactor { get; private set; }
+
 	void Start()
 	{
 		rigidBody = GetComponent<Rigidbody>();
@@ -102,6 +106,8 @@ public class TruckController : MonoBehaviour
 				wheel.WheelCollider.motorTorque = 0f;
 				wheel.WheelCollider.brakeTorque = brakeTorque;
 			}
+			Throttle = 0f;
+			SpeedFactor = 0f;
 			return;
 		}
 
@@ -123,6 +129,9 @@ public class TruckController : MonoBehaviour
 
 		float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
 		float speedFactor = Mathf.Clamp01(Mathf.Abs(forwardSpeed) / maxSpeed);
+
+		Throttle = vInput;
+		SpeedFactor = speedFactor;
 
 		float steerAngle = hInput * Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
 		bool isAccelerating = vInput * forwardSpeed >= 0f;

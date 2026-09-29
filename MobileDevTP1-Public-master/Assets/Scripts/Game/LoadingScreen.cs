@@ -9,6 +9,13 @@ namespace Game
 		[SerializeField] private CanvasGroup canvasGroup;
 		[SerializeField] private Image progressFill;
 		[SerializeField] private float fadeDuration = 0.3f;
+		[SerializeField] private int sortingOrder = 1000;
+
+		private void Awake()
+		{
+			// Lives in DontDestroyOnLoad, so it must sort above every scene's canvases
+			canvasGroup.GetComponent<Canvas>().sortingOrder = sortingOrder;
+		}
 
 		public void Show()
 		{
